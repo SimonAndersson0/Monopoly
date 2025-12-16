@@ -1,10 +1,13 @@
 #pragma once
-class GameManager
+
+
+
+class Card
 {
 	public:
-		GameManager();
+		Card();
 
 	private:
-	
+
 };
 

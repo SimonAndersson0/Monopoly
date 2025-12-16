@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="ActionTile.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardDeck.cpp" />
     <ClCompile Include="CardTile.cpp" />
     <ClCompile Include="Dice.cpp" />
@@ -137,14 +138,17 @@
     <ClCompile Include="PropertyTile.cpp" />
     <ClCompile Include="RailroadTile.cpp" />
     <ClCompile Include="StreetTile.cpp" />
+    <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="UtilityTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionTile.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Card.h" />
     <ClInclude Include="CardDeck.h" />
     <ClInclude Include="CardTile.h" />
+    <ClInclude Include="CardTileType.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GoTile.h" />
@@ -154,6 +158,7 @@
     <ClInclude Include="PropertyTile.h" />
     <ClInclude Include="RailroadTile.h" />
     <ClInclude Include="StreetTile.h" />
+    <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UtilityTile.h" />
   </ItemGroup>

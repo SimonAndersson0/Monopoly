@@ -7,9 +7,9 @@ void UI::showMessage(const std::string& msg)
     std::cout << msg << std::endl;
 }
 
-void UI::waitForEnter()
+void UI::waitForEnter(const std::string& msg)
 {
-    std::cout << "Press ENTER to continue...";
+    std::cout << msg;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
@@ -39,4 +39,21 @@ std::string UI::askString(const std::string& prompt)
     std::cout << prompt << " ";
     std::getline(std::cin, value);
     return value;
+}
+
+char UI::askYesNo(const std::string& prompt)
+{
+    char input;
+    while (true)
+    {
+        std::cout << prompt << " (y/n): ";
+        std::cin >> input;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clear buffer
+
+        input = std::tolower(input); // normalize input
+        if (input == 'y' || input == 'n')
+            return input;
+
+        std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
+    }
 }

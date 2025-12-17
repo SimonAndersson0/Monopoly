@@ -48,8 +48,7 @@ void Game::playTurn(Player& player)
         {
         case TurnState::WaitingForRoll:
         {
-            m_ui.showMessage("Press ENTER to roll dice...");
-            m_ui.waitForEnter();
+            m_ui.waitForEnter("Press ENTER to roll dice...");
 
             // Roll dice via GameManager
             std::vector<int> rolls = m_gameManager.rollDice();

@@ -5,5 +5,6 @@ class ActionTile :
 {
     public:
 		explicit ActionTile(const std::string& name) : Tile(name) {}
+
 };
 

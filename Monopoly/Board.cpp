@@ -9,9 +9,9 @@
 #include "JailTile.h"
 #include "CardTile.h"
 #include "CardTileType.h"
-//#include "TaxTile.h"
-//#include "FreeParkingTile.h"
-//#include "CommunityChestTile.h"
+#include "TaxTile.h"
+#include "FreeParkingTile.h"
+
 
 using namespace tinyxml2;
 

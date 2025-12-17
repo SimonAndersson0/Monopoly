@@ -11,6 +11,7 @@
 #include "CardTileType.h"
 #include "TaxTile.h"
 #include "FreeParkingTile.h"
+#include <iostream>
 
 
 using namespace tinyxml2;
@@ -18,6 +19,11 @@ using namespace tinyxml2;
 Board::Board(const std::string& xmlFilePath)
 {
     loadFromXML(xmlFilePath);
+
+    //// Debug check
+    //std::cout << "Board loaded with "
+    //    << m_tiles.size()
+    //    << " tiles\n";
 }
 
 Tile* Board::getTileAt(int position) const
@@ -29,10 +35,13 @@ Tile* Board::getTileAt(int position) const
 
 void Board::loadFromXML(const std::string& xmlFilePath)
 {
+    //std::cout << "Loading board XML from: "
+    //    << xmlFilePath << std::endl;
+
     XMLDocument doc;
     if (doc.LoadFile(xmlFilePath.c_str()) != XML_SUCCESS)
     {
-        // Could throw exception or log error
+        std::cerr << "FAILED to load board XML!" << std::endl;
         return;
     }
 

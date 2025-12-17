@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<chancecards>
+  <chancecard>
+    <id>1</id>
+    <description>Advance to Go (Collect $200)</description>
+    <action>directadvance</action>
+    <destination>0</destination>
+    <amount>200</amount>
+  </chancecard>
+  <chancecard>
+    <id>2</id>
+    <description>Advance to Illinois Ave.</description>
+    <action>directadvance</action>
+    <destination>24</destination>
+  </chancecard>
+  <chancecard>
+    <id>3</id>
+    <description>Advance to St. Charles Place</description>
+    <action>directadvance</action>
+    <destination>11</destination>
+  </chancecard>
+  <chancecard>
+    <id>4</id>
+    <description>Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the amount thrown.</description>
+    <action>specialadvance</action>
+    <destination>12</destination>
+  </chancecard>
+  <chancecard>
+    <id>5</id>
+    <description>Advance token to the nearest Railroad and pay owner twice the rental to which he/she is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.</description>
+    <action>specialadvance</action>
+    <destination>5</destination>
+  </chancecard>
+  <chancecard>
+    <id>6</id>
+    <description>Bank pays you dividend of $50</description>
+    <action>credit</action>
+    <amount>50</amount>
+  </chancecard>
+  <chancecard>
+    <id>7</id>
+    <description>Get out of Jail Free</description>
+    <action>getoutofjail</action>
+    <amount>1</amount>
+  </chancecard>
+  <chancecard>
+    <id>8</id>
+    <description>Go Back 3 Spaces</description>
+    <action>specialadvance</action>
+    <destination>-3</destination>
+  </chancecard>
+  <chancecard>
+    <id>9</id>
+    <description>Go to Jail</description>
+    <action>directadvance</action>
+    <destination>10</destination>
+  </chancecard>
+  <chancecard>
+    <id>10</id>
+    <description>Make general repairs on all your property: For each house pay $25, For each hotel $100</description>
+    <action>debit</action>
+    <amount>25</amount>
+  </chancecard>
+</chancecards>

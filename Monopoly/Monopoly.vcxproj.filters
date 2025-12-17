@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{1e3dd56e-b0e6-48c4-8529-029e11fc645a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{75378eab-e954-4651-8fce-50bf733b1734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{14b6fbe0-782a-4c3c-9273-baca7cad9237}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -157,13 +157,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\..\..\Downloads\communitydeckcards.xml">
+    <Xml Include="Resources\boardspaces.xml">
       <Filter>Resources</Filter>
     </Xml>
-    <Xml Include="..\..\..\..\Downloads\boardspaces.xml">
+    <Xml Include="Resources\chancecards.xml">
       <Filter>Resources</Filter>
     </Xml>
-    <Xml Include="..\..\..\..\Downloads\chancecards.xml">
+    <Xml Include="Resources\communitydeckcards.xml">
       <Filter>Resources</Filter>
     </Xml>
   </ItemGroup>

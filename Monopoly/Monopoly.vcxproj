@@ -171,9 +171,9 @@
     <ClInclude Include="UtilityTile.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\..\..\Downloads\boardspaces.xml" />
-    <Xml Include="..\..\..\..\Downloads\chancecards.xml" />
-    <Xml Include="..\..\..\..\Downloads\communitydeckcards.xml" />
+    <Xml Include="Resources\boardspaces.xml" />
+    <Xml Include="Resources\chancecards.xml" />
+    <Xml Include="Resources\communitydeckcards.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

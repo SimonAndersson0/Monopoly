@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<communitydeckcards>
+  <communitydeckcard>
+    <id>1</id>
+    <description>Advance to Go (Collect $200)</description>
+    <action>advance</action>
+    <destination>0</destination>
+    <amount>200</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>2</id>
+    <description>Bank error in your favor. Collect $200</description>
+    <action>credit</action>
+    <amount>200</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>3</id>
+    <description>Doctor's fees. Pay $50</description>
+    <action>debit</action>
+    <amount>50</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>4</id>
+    <description>From sale of stock you get $50</description>
+    <action>credit</action>
+    <amount>50</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>5</id>
+    <description>Get Out of Jail Free</description>
+    <action>credit</action>
+    <amount>1</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>6</id>
+    <description>Go to Jail. Go directly to Jail. Do not pass Go, Do not collect $200</description>
+    <action>advance</action>
+    <destination>10</destination>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>7</id>
+    <description>Grand Opera Night. Collect $50 from every player for opening night seats</description>
+    <action>credit</action>
+    <amount>50</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>8</id>
+    <description>Holiday Fund matures. Receive $100</description>
+    <action>credit</action>
+    <amount>100</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>9</id>
+    <description>Income tax refund. Collect $20</description>
+    <action>credit</action>
+    <amount>20</amount>
+  </communitydeckcard>
+  <communitydeckcard>
+    <id>10</id>
+    <description>It is your birthday. Collect $10 from every player</description>
+    <action>credit</action>
+    <amount>10</amount>
+    </communitydeckcard>
+  </communitydeckcards>
+

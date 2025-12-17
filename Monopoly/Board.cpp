@@ -7,7 +7,8 @@
 #include "RailroadTile.h"
 #include "GoTile.h"
 #include "JailTile.h"
-//#include "ChanceTile.h"
+#include "CardTile.h"
+#include "CardTileType.h"
 //#include "TaxTile.h"
 //#include "FreeParkingTile.h"
 //#include "CommunityChestTile.h"
@@ -86,11 +87,11 @@ void Board::loadFromXML(const std::string& xmlFilePath)
         }
         else if (type == "Chance")
         {
-            tile = std::make_unique<ChanceTile>(name);
+            tile = std::make_unique<CardTile>(name, CardTileType::Chance);
         }
         else if (type == "CommunityChest")
         {
-            tile = std::make_unique<CommunityChestTile>(name);
+            tile = std::make_unique<CardTile>(name, CardTileType::CommunityChest);
         }
         else if (type == "FreeParking")
         {

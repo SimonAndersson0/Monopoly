@@ -8,8 +8,9 @@ class CardTile :
     public ActionTile
 {
 public:
-    CardTile(std::string name, CardTileType type);
+    explicit CardTile(const std::string& name,const CardTileType type); //not exactly sure what explicit does
 
+    CardTileType getType() const;
     void onLand(Player& player, GameManager& game) override;
 
 private:

@@ -8,6 +8,11 @@ class RailroadTile :
             : PropertyTile(name, price, rent)
 		{
 		}
+
+        void onLand(Player& player, GameManager& game) override;
+
+    private:
+
         
 };
 

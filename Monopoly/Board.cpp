@@ -58,12 +58,14 @@ void Board::loadFromXML(const std::string& xmlFilePath)
 
         if (type == "Street")
         {
-            const char* color = space->FirstChildElement("Color")->GetText();
+            const char* colorText = space->FirstChildElement("Color")->GetText();
+			if (!colorText) continue;
+            std::string color = colorText;
             int price = space->FirstChildElement("Price")->IntText();
             int rent = space->FirstChildElement("Rent")->IntText();
             int houseCost = space->FirstChildElement("HouseCost")->IntText();
 
-            tile = std::make_unique<StreetTile>(name, color ? color : "", price, rent, houseCost);
+            tile = std::make_unique<StreetTile>(name, price, rent, color, houseCost);
         }
         else if (type == "Utility")
         {

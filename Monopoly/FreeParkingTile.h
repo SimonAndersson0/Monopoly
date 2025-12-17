@@ -6,6 +6,6 @@ class FreeParkingTile :
     public:
         explicit FreeParkingTile(const std::string& name)
             : ActionTile(name) {}
-	//	void onLand(Player& player, GameManager& game) override; dont think it needs one
+		void onLand(Player& player, GameManager& game) override;
 };
 

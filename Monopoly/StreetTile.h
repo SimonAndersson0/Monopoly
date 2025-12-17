@@ -10,6 +10,9 @@ class StreetTile :
 			m_houseCost(houseCost)
             {}
         std::string getColorGroup() const { return m_colorGroup; }
+
+        void onLand(Player& player, GameManager& game) override;
+
     private:
 		std::string m_colorGroup;
 		int m_houseCost;

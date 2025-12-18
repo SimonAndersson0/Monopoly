@@ -1,5 +1,6 @@
 #pragma once
 #include "Tile.h"
+
 class PropertyTile :
     public Tile
 {
@@ -11,9 +12,12 @@ class PropertyTile :
             {}
 		virtual int getPrice() const { return m_price; }
 		virtual int getRent() const { return m_rent; }
+        
 
     private:
 		int m_price;
         int m_rent; 
+
+        
 };
 

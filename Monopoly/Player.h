@@ -39,6 +39,10 @@ public:
     bool isBankrupt() const;
 
     int calculateNetWorth() const;
+	bool isInJail() const;
+	void setInJail();
+	void realeseFromJail();
+
 
 private:
     // ---- Data ----
@@ -50,4 +54,5 @@ private:
 
     bool m_hasGetOutOfJailCard = false;
     bool m_bankrupt = false;
+	bool m_inJail = false;
 };

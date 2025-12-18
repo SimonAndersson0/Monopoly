@@ -126,3 +126,13 @@ int Player::calculateNetWorth() const
     }
     return totalWorth;
 }
+
+bool Player::isInJail() const {
+    return m_inJail;
+}
+void Player::setInJail() {
+	m_inJail = true;
+}
+void Player::realeseFromJail() {
+    m_inJail = false;
+}

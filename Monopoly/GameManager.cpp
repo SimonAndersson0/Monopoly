@@ -43,7 +43,7 @@ bool GameManager::giveMoney(Player& player, int amount) { //money alway goes thr
 
 }
 bool GameManager::takeMoney(Player& player, int amount) { //money alway goes through bank
-    if (m_totalMoney <= amount) {
+    if (true) {
         m_totalMoney += amount;
         player.payMoney(amount);
         return true;

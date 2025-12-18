@@ -67,6 +67,7 @@ void Board::loadFromXML(const std::string& xmlFilePath)
 
         if (type == "Street")
         {
+            //std::cout << "street \n";
             const char* colorText = space->FirstChildElement("Color")->GetText();
 			if (!colorText) continue;
             std::string color = colorText;
@@ -78,38 +79,48 @@ void Board::loadFromXML(const std::string& xmlFilePath)
         }
         else if (type == "Utility")
         {
+            //std::cout << "util";
             int price = space->FirstChildElement("Price")->IntText();
             int rent = space->FirstChildElement("Rent")->IntText();
             tile = std::make_unique<UtilityTile>(name, price, rent);
         }
         else if (type == "TrainStation")
         {
+            //std::cout << "train";
             int price = space->FirstChildElement("Price")->IntText();
             int rent = space->FirstChildElement("Rent")->IntText();
             tile = std::make_unique<RailroadTile>(name, price, rent);
         }
         else if (type == "Go")
         {
+            //std::cout << "Go";
             tile = std::make_unique<GoTile>(name);
         }
         else if (type == "Jail")
         {
+            //std::cout << "jail";
             tile = std::make_unique<JailTile>(name);
         }
         else if (type == "Chance")
         {
+            //std::cout << "chans";
             tile = std::make_unique<CardTile>(name, CardTileType::Chance);
         }
         else if (type == "CommunityChest")
         {
+            //std::cout << "comm";
             tile = std::make_unique<CardTile>(name, CardTileType::CommunityChest);
         }
         else if (type == "FreeParking")
         {
+            //std::cout << "FreeP";
+
             tile = std::make_unique<FreeParkingTile>(name);
         }
         else if (type == "Tax")
         {
+            //std::cout << "Tax";
+
             int amount = space->FirstChildElement("Amount")->IntText();
             tile = std::make_unique<TaxTile>(name, amount);
         }

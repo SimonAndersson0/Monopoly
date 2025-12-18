@@ -24,7 +24,7 @@ public:
 
 private:
     int m_boardSize;
-	int m_totalMoney = 10000;
+	int m_totalMoney = 150000;
 
     // Dice owned by the game manager
     Dice m_dice;

@@ -2,7 +2,7 @@
 <MonopolyBoard>
   <BoardSpaces>
     <Space>
-      <Name>Start</Name>
+      <Name>Go</Name>
       <Type>Go</Type>
     </Space>
     <Space>

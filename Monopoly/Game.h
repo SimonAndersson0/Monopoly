@@ -13,6 +13,8 @@ enum class TurnState
 {
     WaitingForRoll,
     Resolving,
+    Auktioning,
+    BuyingProperty,
     EndTurn
 };
 
@@ -28,8 +30,10 @@ public:
 private:
     void setupPlayers();
     void playTurn(Player& player);
+	void setTurnState(TurnState newState);
 
     // Core systems
+	bool m_gameIsOn = true;
     Board m_board;
     GameManager m_gameManager;
     UI& m_ui;

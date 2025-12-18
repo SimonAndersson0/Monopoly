@@ -117,3 +117,12 @@ bool Player::isBankrupt() const
 {
     return m_bankrupt;
 }
+int Player::calculateNetWorth() const
+{
+    int totalWorth = m_money;
+    for (const PropertyTile* property : m_properties)
+    {
+        totalWorth += property->getPrice();
+    }
+    return totalWorth;
+}

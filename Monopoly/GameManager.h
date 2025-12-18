@@ -18,9 +18,13 @@ public:
     int rollDiceTotal();           // returns total of dice
 
     int getBoardSize() const;
+	bool giveMoney(Player& player, int amount);
+	bool takeMoney(Player& player, int amount);
+	bool canAfford(Player& player, int amount);
 
 private:
     int m_boardSize;
+	int m_totalMoney = 10000;
 
     // Dice owned by the game manager
     Dice m_dice;

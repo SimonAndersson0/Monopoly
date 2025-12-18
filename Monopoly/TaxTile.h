@@ -1,5 +1,8 @@
 #pragma once
 #include "ActionTile.h"
+class Player;
+class GameManager;
+
 class TaxTile :
     public ActionTile
 {

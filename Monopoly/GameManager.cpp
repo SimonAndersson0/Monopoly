@@ -32,3 +32,26 @@ int GameManager::getBoardSize() const
 {
     return m_boardSize;
 }
+
+bool GameManager::giveMoney(Player& player, int amount) { //money alway goes through bank
+    if (m_totalMoney >= amount) {
+			m_totalMoney -= amount;
+            player.receiveMoney(amount);
+            return true;
+        }
+    return false;
+
+}
+bool GameManager::takeMoney(Player& player, int amount) { //money alway goes through bank
+    if (m_totalMoney <= amount) {
+        m_totalMoney += amount;
+        player.payMoney(amount);
+        return true;
+    }
+    return false;      
+}
+bool GameManager::canAfford(Player& player, int amount) {
+    return player.getMoney() >= amount; //change to total money
+}
+
+

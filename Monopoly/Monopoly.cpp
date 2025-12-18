@@ -8,7 +8,7 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    std::cout << "Welcome to monopol!\n";
     UI ui;
 
     Game game("Resources/boardspaces.xml", ui);

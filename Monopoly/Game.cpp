@@ -8,12 +8,16 @@ Game::Game(const std::string& boardXmlPath, UI& ui)
     m_ui(ui)
 {
 }
+void  Game::setTurnState(TurnState newState){
+    // This function can be expanded later for additional logic on state change
+    m_turnState = newState;
+}
 
 void Game::run()
 {
     setupPlayers();
 
-    while (true) // add proper game-over logic later
+    while (m_gameIsOn) // add proper game-over logic later
     {
         Player& currentPlayer = m_players[m_currentPlayerIndex];
         m_ui.showMessage("\n--- " + currentPlayer.getName() + "'s turn ---");
@@ -61,15 +65,30 @@ void Game::playTurn(Player& player)
             m_ui.showMessage(rollMsg);
 
             // Move player
-            int newPosition = (player.getPosition() + rollTotal) % m_board.getSize();
+            int oldPosition = player.getPosition();
+			int boardSize = m_board.getSize();
+            int newPosition = (oldPosition + rollTotal) % boardSize;
+
+            // Detect passing GO
+            if (oldPosition + rollTotal >= boardSize)
+            {
+                if (m_gameManager.giveMoney(player, 200)) { //returns true on success
+                    m_ui.showMessage(player.getName() + " passed GO and received 200!");
+                }
+                else {
+                    m_ui.showMessage("Bank is out of money! Cannot pay GO bonus.");
+                }
+            }
+
             player.setPosition(newPosition);
 
             // Land on tile
             Tile* tile = m_board.getTileAt(newPosition);
+            m_ui.showMessage("You have: " + std::to_string(player.getMoney()));
             m_ui.showMessage("Landed on: " + tile->getName());
             tile->onLand(player, m_gameManager);
 
-            m_turnState = TurnState::EndTurn;
+			Game::setTurnState(TurnState::EndTurn);
             break;
         }
 

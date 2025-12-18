@@ -38,6 +38,8 @@ public:
 
     bool isBankrupt() const;
 
+    int calculateNetWorth() const;
+
 private:
     // ---- Data ----
     std::string m_name;

@@ -9,14 +9,8 @@
 #include <vector>
 #include <string>
 
-enum class TurnState
-{
-    WaitingForRoll,
-    Resolving,
-    Auktioning,
-    BuyingProperty,
-    EndTurn
-};
+
+class DecisionProvider;
 
 class Game
 {
@@ -30,7 +24,6 @@ public:
 private:
     void setupPlayers();
     void playTurn(Player& player);
-	void setTurnState(TurnState newState);
 
     // Core systems
 	bool m_gameIsOn = true;
@@ -42,6 +35,5 @@ private:
     std::vector<Player> m_players;
     int m_currentPlayerIndex = 0;
 
-    // Turn state
-    TurnState m_turnState = TurnState::WaitingForRoll;
+    std::vector<std::unique_ptr<DecisionProvider>> m_controllers;
 };

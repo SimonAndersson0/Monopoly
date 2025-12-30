@@ -55,3 +55,22 @@ bool GameManager::canAfford(Player& player, int amount) {
 }
 
 
+void GameManager::queueAction(std::unique_ptr<Action> action)
+{
+    m_actions.push(std::move(action));
+}
+
+bool GameManager::hasPendingActions() const
+{
+    return !m_actions.empty();
+}
+
+void GameManager::executeNextAction()
+{
+    auto action = std::move(m_actions.front());
+    m_actions.pop();
+    action->execute(*this);
+}
+
+
+

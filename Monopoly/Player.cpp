@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "DecisionProvider.h"
 #include "PropertyTile.h"
 
 #include <algorithm>
@@ -6,10 +7,16 @@
 
 // ---- Construction ----
 
-Player::Player(std::string name, int startMoney)
+Player::Player(std::string name, int startMoney, DecisionProvider& controller)
     : m_name(std::move(name))
     , m_money(startMoney)
+    , m_controller(controller)
 {
+}
+
+DecisionProvider& Player::controller()
+{
+    return m_controller;
 }
 
 // ---- Identity ----

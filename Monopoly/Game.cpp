@@ -1,16 +1,15 @@
 #include "Game.h"
 #include <numeric>
 #include <iostream>
+#include "DecisionProvider.h"
+#include "ConsoleDecisionProvider.h"
+#include "BotDecisionProvider.h"
 
 Game::Game(const std::string& boardXmlPath, UI& ui)
     : m_board(boardXmlPath),
-    m_gameManager(m_board.getSize()), // pass board size
+    m_gameManager(m_board.getSize()),
     m_ui(ui)
 {
-}
-void  Game::setTurnState(TurnState newState){
-    // This function can be expanded later for additional logic on state change
-    m_turnState = newState;
 }
 
 void Game::run()
@@ -25,7 +24,8 @@ void Game::run()
         playTurn(currentPlayer);
 
         // Advance to next player
-        m_currentPlayerIndex = (m_currentPlayerIndex + 1) % m_players.size();
+        m_currentPlayerIndex =
+            (m_currentPlayerIndex + 1) % m_players.size();
     }
 }
 
@@ -38,62 +38,65 @@ void Game::setupPlayers()
         std::string name = m_ui.askString(
             "Enter name for player " + std::to_string(i + 1) + ":"
         );
-        m_players.emplace_back(name, 1500);
+
+        char type = m_ui.askYesNo("Is this player a bot?");
+
+        std::unique_ptr<DecisionProvider> controller;
+
+        if (type == 'y')
+            controller = std::make_unique<BotDecisionProvider>();
+        else
+            controller = std::make_unique<ConsoleDecisionProvider>(m_ui);
+
+        // Create player with controller
+        m_players.emplace_back(name, 1500, *controller);
+
+        // Store controller so it stays alive
+        m_controllers.push_back(std::move(controller));
     }
 }
 
 void Game::playTurn(Player& player)
 {
-    m_turnState = TurnState::WaitingForRoll;
+    // ---- Roll dice ----
+    m_ui.waitForEnter("Press ENTER to roll dice...");
 
-    while (m_turnState != TurnState::EndTurn)
+    std::vector<int> rolls = m_gameManager.rollDice();
+    int rollTotal = std::accumulate(rolls.begin(), rolls.end(), 0);
+
+    // Show dice
+    std::string rollMsg = "Rolled: ";
+    for (int r : rolls)
+        rollMsg += std::to_string(r) + " ";
+    rollMsg += "(Total: " + std::to_string(rollTotal) + ")";
+    m_ui.showMessage(rollMsg);
+
+    // ---- Move player ----
+    int oldPosition = player.getPosition();
+    int boardSize = m_board.getSize();
+    int newPosition = (oldPosition + rollTotal) % boardSize;
+
+    // Detect passing GO
+    if (oldPosition + rollTotal >= boardSize)
     {
-        switch (m_turnState)
-        {
-        case TurnState::WaitingForRoll:
-        {
-            m_ui.waitForEnter("Press ENTER to roll dice...");
+        if (m_gameManager.giveMoney(player, 200))
+            m_ui.showMessage(player.getName() + " passed GO and received 200!");
+        else
+            m_ui.showMessage("Bank is out of money! Cannot pay GO bonus.");
+    }
 
-            // Roll dice via GameManager
-            std::vector<int> rolls = m_gameManager.rollDice();
-            int rollTotal = std::accumulate(rolls.begin(), rolls.end(), 0);
+    player.setPosition(newPosition);
 
-            // Show individual dice and total
-            std::string rollMsg = "Rolled: ";
-            for (int r : rolls) rollMsg += std::to_string(r) + " ";
-            rollMsg += "(Total: " + std::to_string(rollTotal) + ")";
-            m_ui.showMessage(rollMsg);
+    // ---- Land on tile ----
+    Tile* tile = m_board.getTileAt(newPosition);
+    m_ui.showMessage("You have: " + std::to_string(player.getMoney()));
+    m_ui.showMessage("Landed on: " + tile->getName());
 
-            // Move player
-            int oldPosition = player.getPosition();
-			int boardSize = m_board.getSize();
-            int newPosition = (oldPosition + rollTotal) % boardSize;
+    tile->onLand(player, m_gameManager); //generate actions
 
-            // Detect passing GO
-            if (oldPosition + rollTotal >= boardSize)
-            {
-                if (m_gameManager.giveMoney(player, 200)) { //returns true on success
-                    m_ui.showMessage(player.getName() + " passed GO and received 200!");
-                }
-                else {
-                    m_ui.showMessage("Bank is out of money! Cannot pay GO bonus.");
-                }
-            }
-
-            player.setPosition(newPosition);
-
-            // Land on tile
-            Tile* tile = m_board.getTileAt(newPosition);
-            m_ui.showMessage("You have: " + std::to_string(player.getMoney()));
-            m_ui.showMessage("Landed on: " + tile->getName());
-            tile->onLand(player, m_gameManager);
-
-			Game::setTurnState(TurnState::EndTurn);
-            break;
-        }
-
-        case TurnState::EndTurn:
-            break;
-        }
+    // ---- Resolve all resulting actions ----
+    while (m_gameManager.hasPendingActions())
+    {
+        m_gameManager.executeNextAction();
     }
 }

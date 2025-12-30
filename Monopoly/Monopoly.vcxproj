@@ -125,9 +125,13 @@
   <ItemGroup>
     <ClCompile Include="ActionTile.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BotDecisionProvider.cpp" />
+    <ClCompile Include="BuyPropertyAction.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardDeck.cpp" />
     <ClCompile Include="CardTile.cpp" />
+    <ClCompile Include="ConsoleDecisionProvider.cpp" />
+    <ClCompile Include="ConsoleUI.cpp" />
     <ClCompile Include="Dice.cpp" />
     <ClCompile Include="FreeParkingTile.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -143,16 +147,21 @@
     <ClCompile Include="TaxTile.cpp" />
     <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="UI.cpp" />
     <ClCompile Include="UtilityTile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
     <ClInclude Include="ActionTile.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="BotDecisionProvider.h" />
+    <ClInclude Include="BuyPropertyAction.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardDeck.h" />
     <ClInclude Include="CardTile.h" />
     <ClInclude Include="CardTileType.h" />
+    <ClInclude Include="ConsoleDecisionProvider.h" />
+    <ClInclude Include="ConsoleUI.h" />
+    <ClInclude Include="DecisionProvider.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="FreeParkingTile.h" />
     <ClInclude Include="Game.h" />

@@ -2,6 +2,9 @@
 #include <vector>
 #include <string>
 #include "Dice.h"
+#include <queue>
+#include <memory>
+#include "Action.h"
 
 class Player;
 
@@ -21,10 +24,15 @@ public:
 	bool giveMoney(Player& player, int amount);
 	bool takeMoney(Player& player, int amount);
 	bool canAfford(Player& player, int amount);
+    void queueAction(std::unique_ptr<Action> action);
+    bool hasPendingActions() const;
+    void executeNextAction();
+
 
 private:
     int m_boardSize;
 	int m_totalMoney = 150000;
+    std::queue<std::unique_ptr<Action>> m_actions;
 
     // Dice owned by the game manager
     Dice m_dice;

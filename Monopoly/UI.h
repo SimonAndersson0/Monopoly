@@ -4,17 +4,14 @@
 class UI
 {
 public:
+    virtual ~UI() = default;
+
     // Output
-    void showMessage(const std::string& msg);
+    virtual void showMessage(const std::string& msg) = 0;
 
-    // Input helpers
-    void waitForEnter(const std::string& msg);
-
-    int askInt(const std::string& prompt);
-
-    std::string askString(const std::string& prompt);
-
-    char askYesNo(const std::string& prompt);
-
-
+    // Input
+    virtual void waitForEnter(const std::string& msg) = 0;
+    virtual int askInt(const std::string& prompt) = 0;
+    virtual std::string askString(const std::string& prompt) = 0;
+    virtual bool askYesNo(const std::string& prompt) = 0;
 };

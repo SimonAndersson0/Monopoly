@@ -4,12 +4,12 @@
 #include <iostream>
 
 #include "Game.h"
-#include "UI.h"
+#include "ConsoleUI.h"
 
 int main()
 {
     std::cout << "Welcome to monopol!\n";
-    UI ui;
+    ConsoleUI ui;
 
     Game game("Resources/boardspaces.xml", ui);
     game.run();

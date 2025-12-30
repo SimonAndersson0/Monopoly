@@ -7,6 +7,7 @@
 #include "Action.h"
 
 class Player;
+class PropertyTile;
 
 class GameManager
 {
@@ -23,11 +24,16 @@ public:
     int getBoardSize() const;
 	bool giveMoney(Player& player, int amount);
 	bool takeMoney(Player& player, int amount);
-	bool canAfford(Player& player, int amount);
+	bool canAfford(const Player& player, int amount) const;
     void queueAction(std::unique_ptr<Action> action);
     bool hasPendingActions() const;
     void executeNextAction();
-
+    void buyProperty(Player& player, PropertyTile& property);
+    void transferMoney(Player& from, Player& to, int amount);
+    bool canRaiseMoney(const Player& player, int amount) const; //const after means it does not modify gamemanager
+    void mortgageProperty(Player& player, PropertyTile& property);
+    void declareBankruptcy(Player& player, Player* creditor);
+	bool canMortgage(const Player& player, const PropertyTile& property) const;
 
 private:
     int m_boardSize;
@@ -36,4 +42,6 @@ private:
 
     // Dice owned by the game manager
     Dice m_dice;
+
+    
 };

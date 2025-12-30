@@ -22,3 +22,11 @@ int BotDecisionProvider::decideAuctionBid(Player& player, PropertyTile& property
     if (bid > maxBid) return 0; // pass
     return bid;
 }
+PropertyTile* BotDecisionProvider::decideMortgageProperty(Player& player)
+{
+    for (auto* p : player.getProperties())
+        if (!p->isMortgaged())
+            return p;
+
+    return nullptr;
+}

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "PropertyTile.h"
 #include "GameManager.h"
+#include "DecisionProvider.h" // Add this include to resolve incomplete type errors
 // #include "AuctionAction.h"
 
 BuyPropertyAction::BuyPropertyAction(Player& player, PropertyTile& property)
@@ -14,7 +15,7 @@ BuyPropertyAction::BuyPropertyAction(Player& player, PropertyTile& property)
 void BuyPropertyAction::execute(GameManager& game)
 {
     bool buy = m_player.controller()
-        .decideBuyProperty(m_player, m_property);
+        .decideBuyProperty(m_player, m_property); //always needs decision provider maybe all of them unsure
 
     if (buy && game.canAfford(m_player, m_property.getPrice()))
     {

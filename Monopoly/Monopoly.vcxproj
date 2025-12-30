@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionTile.cpp" />
+    <ClCompile Include="BankruptcyAction.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BotDecisionProvider.cpp" />
     <ClCompile Include="BuyPropertyAction.cpp" />
@@ -140,9 +141,11 @@
     <ClCompile Include="GoToJailTile.cpp" />
     <ClCompile Include="JailTile.cpp" />
     <ClCompile Include="Monopoly.cpp" />
+    <ClCompile Include="PayRentAction.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PropertyTile.cpp" />
     <ClCompile Include="RailroadTile.cpp" />
+    <ClCompile Include="RaiseMoneyAction.cpp" />
     <ClCompile Include="StreetTile.cpp" />
     <ClCompile Include="TaxTile.cpp" />
     <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp" />
@@ -152,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Action.h" />
     <ClInclude Include="ActionTile.h" />
+    <ClInclude Include="BankruptcyAction.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="BotDecisionProvider.h" />
     <ClInclude Include="BuyPropertyAction.h" />
@@ -169,9 +173,11 @@
     <ClInclude Include="GoTile.h" />
     <ClInclude Include="GoToJailTile.h" />
     <ClInclude Include="JailTile.h" />
+    <ClInclude Include="PayRentAction.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PropertyTile.h" />
     <ClInclude Include="RailroadTile.h" />
+    <ClInclude Include="RaiseMoneyAction.h" />
     <ClInclude Include="StreetTile.h" />
     <ClInclude Include="TaxTile.h" />
     <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h" />

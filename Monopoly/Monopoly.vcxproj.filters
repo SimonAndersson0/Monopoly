@@ -120,6 +120,15 @@
     <ClCompile Include="BotDecisionProvider.cpp">
       <Filter>Source Files\DecisionProvider</Filter>
     </ClCompile>
+    <ClCompile Include="PayRentAction.cpp">
+      <Filter>Source Files\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="RaiseMoneyAction.cpp">
+      <Filter>Source Files\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="BankruptcyAction.cpp">
+      <Filter>Source Files\Action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -205,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="BotDecisionProvider.h">
       <Filter>Header Files\DecisionProvider</Filter>
+    </ClInclude>
+    <ClInclude Include="PayRentAction.h">
+      <Filter>Header Files\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="RaiseMoneyAction.h">
+      <Filter>Header Files\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="BankruptcyAction.h">
+      <Filter>Header Files\Action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

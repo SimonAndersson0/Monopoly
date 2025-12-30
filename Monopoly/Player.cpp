@@ -2,6 +2,7 @@
 #include "DecisionProvider.h"
 #include "PropertyTile.h"
 
+
 #include <algorithm>
 #include <stdexcept>
 
@@ -142,4 +143,7 @@ void Player::setInJail() {
 }
 void Player::realeseFromJail() {
     m_inJail = false;
+}
+void Player::declareBankruptcy() {
+    m_bankrupt = true;
 }

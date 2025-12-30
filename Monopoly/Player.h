@@ -42,6 +42,7 @@ public:
     void giveGetOutOfJailCard();
     void useGetOutOfJailCard();
 
+	void declareBankruptcy();
     bool isBankrupt() const;
 
     int calculateNetWorth() const;

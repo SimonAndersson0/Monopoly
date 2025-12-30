@@ -14,4 +14,7 @@ public:
     virtual int decideAuctionBid(Player& player,
         PropertyTile& property,
         int currentBid) = 0;
+
+    virtual PropertyTile* decideMortgageProperty(Player& player) = 0;
+
 };

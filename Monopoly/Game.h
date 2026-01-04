@@ -17,6 +17,7 @@ class Game
 public:
     // Game owns the board and game manager, uses UI
     Game(const std::string& boardXmlPath, UI& ui);
+    ~Game(); // declare destructor out-of-line
 
     // Starts the main game loop
     void run();

@@ -2,9 +2,9 @@
 #include "Player.h"
 #include "GameManager.h"
 
-BankruptcyAction::BankruptcyAction(Player& player, Player& creditor)
+BankruptcyAction::BankruptcyAction(Player& player, Player* creditor)
     : m_player(player)
-    , m_creditor(creditor)
+    , m_creditor(*creditor)
 {
 }
 

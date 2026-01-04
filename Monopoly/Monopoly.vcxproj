@@ -141,7 +141,7 @@
     <ClCompile Include="GoToJailTile.cpp" />
     <ClCompile Include="JailTile.cpp" />
     <ClCompile Include="Monopoly.cpp" />
-    <ClCompile Include="PayRentAction.cpp" />
+    <ClCompile Include="PayMoneyAction.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PropertyTile.cpp" />
     <ClCompile Include="RailroadTile.cpp" />
@@ -173,7 +173,7 @@
     <ClInclude Include="GoTile.h" />
     <ClInclude Include="GoToJailTile.h" />
     <ClInclude Include="JailTile.h" />
-    <ClInclude Include="PayRentAction.h" />
+    <ClInclude Include="PayMoneyAction.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PropertyTile.h" />
     <ClInclude Include="RailroadTile.h" />

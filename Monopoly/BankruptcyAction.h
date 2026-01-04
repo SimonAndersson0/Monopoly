@@ -1,13 +1,14 @@
 #pragma once
 #include "Action.h"
 
+class GameManager;
 class Player;
 
 class BankruptcyAction :
     public Action
 {
 public:
-    BankruptcyAction(Player& player, Player& creditor);
+    BankruptcyAction(Player& player, Player* creditor);
 
     void execute(GameManager& game) override;
 

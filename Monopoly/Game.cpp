@@ -5,6 +5,10 @@
 #include "ConsoleDecisionProvider.h"
 #include "BotDecisionProvider.h"
 
+// Define destructor out-of-line so unique_ptr destructor is instantiated
+
+Game::~Game() = default; //needed when unique_ptr is used in header or else compiler gives error since it tries to delete from header where the include is not known
+
 Game::Game(const std::string& boardXmlPath, UI& ui)
     : m_board(boardXmlPath),
     m_gameManager(m_board.getSize()),
@@ -59,7 +63,7 @@ void Game::setupPlayers()
 void Game::playTurn(Player& player)
 {
     // ---- Roll dice ----
-    m_ui.waitForEnter("Press ENTER to roll dice...");
+    m_ui.waitForEnter("Press ENTER to roll dice..."); //needs to be changed to decision provider instead of ui since ui is only for display
 
     std::vector<int> rolls = m_gameManager.rollDice();
     int rollTotal = std::accumulate(rolls.begin(), rolls.end(), 0);

@@ -1,7 +1,7 @@
 #include "RaiseMoneyAction.h"
 #include "GameManager.h"
 #include "Player.h"
-#include "PayRentAction.h"
+#include "PayMoneyAction.h"
 #include "BankruptcyAction.h"
 #include "DecisionProvider.h"
 
@@ -21,8 +21,8 @@ void RaiseMoneyAction::execute(GameManager& game)
     if (m_player.getMoney() >= m_requiredAmount)
     {
         game.queueAction(
-            std::make_unique<PayRentAction>(
-                m_player, *m_creditor
+            std::make_unique<PayMoneyAction>(
+                m_player, m_requiredAmount , m_creditor
             )
         );
         return;

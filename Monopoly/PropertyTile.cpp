@@ -2,21 +2,22 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "BuyPropertyAction.h"
-#include "PayRentAction.h"
+#include "PayMoneyAction.h"
+
 
 
 void PropertyTile::onLand(Player& player, GameManager& game)
 {
-    if (getOwner()==nullptr)
+    if (getOwner() == nullptr)
     {
         game.queueAction(
             std::make_unique<BuyPropertyAction>(player, *this)
         );
     }
-    else if (getOwner() != &player)
+    else if (getOwner() != &player) // player does not own the property
     {
         game.queueAction(
-            std::make_unique<PayRentAction>(player, *this)
+            std::make_unique<PayMoneyAction>(player, getRent(), getOwner())
         );
     }
 }

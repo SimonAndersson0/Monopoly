@@ -11,6 +11,8 @@ public:
     int decideAuctionBid(Player& player, PropertyTile& property, int currentBid) override;
 	PropertyTile* decideMortgageProperty(Player& player) override;
 
+    void waitForRoll(Player& player) override;
+
 private:
     UI& m_ui;
 };

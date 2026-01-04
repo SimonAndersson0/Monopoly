@@ -38,3 +38,7 @@ PropertyTile* ConsoleDecisionProvider::decideMortgageProperty(Player& player)
 
     return props[choice];
 }
+void ConsoleDecisionProvider::waitForRoll(Player&)
+{
+    m_ui.waitForEnter("Press ENTER to roll dice...");
+}

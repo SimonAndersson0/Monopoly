@@ -10,4 +10,5 @@ public:
     bool decideBuyProperty(Player& player, PropertyTile& property) override;
     int decideAuctionBid(Player& player, PropertyTile& property, int currentBid) override;
     PropertyTile* decideMortgageProperty(Player& player) override;
+    void waitForRoll(Player& player) override;
 };

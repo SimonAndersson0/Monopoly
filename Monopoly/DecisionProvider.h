@@ -16,5 +16,6 @@ public:
         int currentBid) = 0;
 
     virtual PropertyTile* decideMortgageProperty(Player& player) = 0;
+    virtual void waitForRoll(Player& player) = 0;
 
 };

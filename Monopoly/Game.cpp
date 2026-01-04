@@ -43,11 +43,11 @@ void Game::setupPlayers()
             "Enter name for player " + std::to_string(i + 1) + ":"
         );
 
-        char type = m_ui.askYesNo("Is this player a bot?");
+        bool yesIsABot = m_ui.askYesNo("Is this player a bot?");
 
         std::unique_ptr<DecisionProvider> controller;
 
-        if (type == 'y')
+        if (yesIsABot)
             controller = std::make_unique<BotDecisionProvider>();
         else
             controller = std::make_unique<ConsoleDecisionProvider>(m_ui);
@@ -63,12 +63,11 @@ void Game::setupPlayers()
 void Game::playTurn(Player& player)
 {
     // ---- Roll dice ----
-    m_ui.waitForEnter("Press ENTER to roll dice..."); //needs to be changed to decision provider instead of ui since ui is only for display
+    player.controller().waitForRoll(player);
 
     std::vector<int> rolls = m_gameManager.rollDice();
     int rollTotal = std::accumulate(rolls.begin(), rolls.end(), 0);
 
-    // Show dice
     std::string rollMsg = "Rolled: ";
     for (int r : rolls)
         rollMsg += std::to_string(r) + " ";
@@ -80,25 +79,20 @@ void Game::playTurn(Player& player)
     int boardSize = m_board.getSize();
     int newPosition = (oldPosition + rollTotal) % boardSize;
 
-    // Detect passing GO
     if (oldPosition + rollTotal >= boardSize)
     {
         if (m_gameManager.giveMoney(player, 200))
             m_ui.showMessage(player.getName() + " passed GO and received 200!");
-        else
-            m_ui.showMessage("Bank is out of money! Cannot pay GO bonus.");
     }
 
     player.setPosition(newPosition);
 
-    // ---- Land on tile ----
     Tile* tile = m_board.getTileAt(newPosition);
     m_ui.showMessage("You have: " + std::to_string(player.getMoney()));
     m_ui.showMessage("Landed on: " + tile->getName());
 
-    tile->onLand(player, m_gameManager); //generate actions
+    tile->onLand(player, m_gameManager);
 
-    // ---- Resolve all resulting actions ----
     while (m_gameManager.hasPendingActions())
     {
         m_gameManager.executeNextAction();

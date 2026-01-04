@@ -30,3 +30,9 @@ PropertyTile* BotDecisionProvider::decideMortgageProperty(Player& player)
 
     return nullptr;
 }
+
+void BotDecisionProvider::waitForRoll(Player&)
+{
+    // Do nothing
+    // Bot is always ready
+}

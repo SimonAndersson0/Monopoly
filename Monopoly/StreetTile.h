@@ -11,7 +11,9 @@ class StreetTile :
             {}
         std::string getColorGroup() const { return m_colorGroup; }
 
-        void onLand(Player& player, GameManager& game) override;
+        //void onLand(Player& player, GameManager& game) override;
+        int getPrice() const override;
+        int getRent() const override;
 
     private:
 		std::string m_colorGroup;

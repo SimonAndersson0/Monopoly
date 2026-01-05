@@ -8,20 +8,23 @@
 
 class Player;
 class PropertyTile;
+class Board;
+class Tile;
 
 class GameManager
 {
 public:
-    GameManager(int boardSize, int diceAmount = 2, int diceMaxValue = 6);
+    GameManager(const Board& board, int diceAmount = 2, int diceMaxValue = 6);
 
     // ---- Player movement ----
-    void movePlayer(Player& player, int steps);
+    Tile* movePlayer(Player& player);
 
     // ---- Dice rolls ----
     std::vector<int> rollDice();   // returns individual dice
-    int rollDiceTotal();           // returns total of dice
+	std::vector<int> getLastRoll() const { return m_lastRoll; }
+    int getSumOfLastRoll() const;
 
-    int getBoardSize() const;
+
 	bool giveMoney(Player& player, int amount);
 	bool takeMoney(Player& player, int amount);
 	bool canAfford(const Player& player, int amount) const;
@@ -35,11 +38,14 @@ public:
     void declareBankruptcy(Player& player, Player* creditor);
 	bool canMortgage(const Player& player, const PropertyTile& property) const;
 
+
+
+
 private:
-    int m_boardSize;
+    const Board& m_board;
 	int m_totalMoney = 150000;
     std::queue<std::unique_ptr<Action>> m_actions;
-
+    std::vector<int> m_lastRoll;
     // Dice owned by the game manager
     Dice m_dice;
 

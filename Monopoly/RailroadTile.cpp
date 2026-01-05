@@ -1,7 +1,10 @@
 #include "RailroadTile.h"
 
-void RailroadTile::onLand(Player& player, GameManager& game)
+int RailroadTile::getPrice() const
 {
-    // Monopoly logic here
-    // buy property, pay rent, etc.
+	return m_price;
+}
+int RailroadTile::getRent() const
+{
+	return m_rent;
 }

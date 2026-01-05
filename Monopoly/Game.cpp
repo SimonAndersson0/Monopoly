@@ -11,7 +11,7 @@ Game::~Game() = default; //needed when unique_ptr is used in header or else comp
 
 Game::Game(const std::string& boardXmlPath, UI& ui)
     : m_board(boardXmlPath),
-    m_gameManager(m_board.getSize()),
+    m_gameManager(m_board),
     m_ui(ui)
 {
 }
@@ -62,36 +62,29 @@ void Game::setupPlayers()
 
 void Game::playTurn(Player& player)
 {
-    // ---- Roll dice ----
     player.controller().waitForRoll(player);
 
-    std::vector<int> rolls = m_gameManager.rollDice();
-    int rollTotal = std::accumulate(rolls.begin(), rolls.end(), 0);
+    m_gameManager.rollDice();
 
-    std::string rollMsg = "Rolled: ";
-    for (int r : rolls)
-        rollMsg += std::to_string(r) + " ";
-    rollMsg += "(Total: " + std::to_string(rollTotal) + ")";
-    m_ui.showMessage(rollMsg);
+    int rollTotal = m_gameManager.getSumOfLastRoll();
 
-    // ---- Move player ----
-    int oldPosition = player.getPosition();
-    int boardSize = m_board.getSize();
-    int newPosition = (oldPosition + rollTotal) % boardSize;
+    m_ui.showMessage("Rolled " + std::to_string(rollTotal));
 
-    if (oldPosition + rollTotal >= boardSize)
-    {
-        if (m_gameManager.giveMoney(player, 200))
-            m_ui.showMessage(player.getName() + " passed GO and received 200!");
-    }
+    // RULE: movement & pass-go handled here
+    Tile* landedTile = m_gameManager.movePlayer(player);
 
-    player.setPosition(newPosition);
-
-    Tile* tile = m_board.getTileAt(newPosition);
     m_ui.showMessage("You have: " + std::to_string(player.getMoney()));
-    m_ui.showMessage("Landed on: " + tile->getName());
 
-    tile->onLand(player, m_gameManager);
+    if (landedTile)
+    {
+        m_ui.showMessage("Landed on: " + landedTile->getName());
+        landedTile->onLand(player, m_gameManager);
+    }
+    else
+    {
+        // This should never happen if board is valid otherwise something is very wrong with the tile indexing or the board itself was not built correctly
+        m_ui.showMessage("Error: landed on an invalid tile!");
+    }
 
     while (m_gameManager.hasPendingActions())
     {

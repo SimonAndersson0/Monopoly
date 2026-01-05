@@ -7,8 +7,9 @@ class UtilityTile :
         explicit UtilityTile(const std::string& name, int price, int rent)
             : PropertyTile(name, price, rent) {
         }
-        void onLand(Player& player, GameManager& game) override;
-
+        //void onLand(Player& player, GameManager& game) override;
+        int getPrice() const override;
+        int getRent() const override;
 
 
 };

@@ -8,8 +8,9 @@ class RailroadTile :
             : PropertyTile(name, price, rent)
 		{
 		}
-
-        void onLand(Player& player, GameManager& game) override;
+        int getPrice() const override;
+        int getRent() const override;
+        //void onLand(Player& player, GameManager& game) override;
 
     private:
 

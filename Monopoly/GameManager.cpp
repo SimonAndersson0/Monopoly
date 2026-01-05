@@ -1,38 +1,54 @@
 #include "GameManager.h"
 #include "Player.h"
 #include "PropertyTile.h"
+#include "Board.h"
+#include "Tile.h"
 
 // Constructor: initializes board size and dice
-GameManager::GameManager(int boardSize, int diceAmount, int diceMaxValue)
-    : m_boardSize(boardSize),
-    m_dice(diceAmount, diceMaxValue) // initialize dice here
+GameManager::GameManager(const Board& board, int diceAmount, int diceMaxValue)
+    : m_board(board),
+    m_dice(diceAmount, diceMaxValue)
 {
 }
 
 // Move the player around the board
-void GameManager::movePlayer(Player& player, int steps)
+Tile* GameManager::movePlayer(Player& player) //might change to just math instead of each step if i dont wanna add midmove events ex rule when tile is passed
 {
-    // Assume Player has getPosition() and setPosition()
-    int newPos = (player.getPosition() + steps) % m_boardSize;
-    player.setPosition(newPos);
+    int pos = player.getPosition();
+    int steps = getSumOfLastRoll();
+    int boardSize = m_board.getSize();
+
+    while (steps > 0)
+    {
+        int toEnd = boardSize - pos;
+
+        if (steps >= toEnd)
+        {
+            // We will pass (or land on) GO
+            steps -= toEnd;
+            pos = 0;
+
+            giveMoney(player, 200);
+            // notify observers here if needed
+        }
+        else
+        {
+            pos += steps;
+            steps = 0;
+        }
+    }
+
+    player.setPosition(pos);
+    return m_board.getTileAt(pos);
 }
 
 // Roll dice and return individual values
 std::vector<int> GameManager::rollDice()
 {
-    return m_dice.roll();
+    m_lastRoll = m_dice.roll();
+    return m_lastRoll;
 }
 
-// Roll dice and return total
-int GameManager::rollDiceTotal()
-{
-    return m_dice.rollTotal();
-}
-
-int GameManager::getBoardSize() const
-{
-    return m_boardSize;
-}
 
 bool GameManager::giveMoney(Player& player, int amount) { //money alway goes through bank
     if (m_totalMoney >= amount) {
@@ -67,12 +83,10 @@ void GameManager::queueAction(std::unique_ptr<Action> action)
 {
     m_actions.push(std::move(action));
 }
-
 bool GameManager::hasPendingActions() const
 {
     return !m_actions.empty();
 }
-
 void GameManager::executeNextAction()
 {
     auto action = std::move(m_actions.front());
@@ -111,3 +125,13 @@ bool GameManager::canMortgage(const Player& player, const PropertyTile& property
     // Check if the player owns the property and if it's not already mortgaged
     return player.owns(property) && !property.isMortgaged();
 }
+
+int GameManager::getSumOfLastRoll() const{
+    int sum = 0;
+    for (int roll : m_lastRoll) {
+        sum += roll;
+    }
+    return sum;
+}
+
+//maybe centralize rent calcu here

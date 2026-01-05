@@ -20,17 +20,24 @@ void Game::run()
 {
     setupPlayers();
 
-    while (m_gameIsOn) // add proper game-over logic later
+    while (!m_gameManager.isGameOver(m_players)) // add proper game-over logic later
     {
         Player& currentPlayer = m_players[m_currentPlayerIndex];
         m_ui.showMessage("\n--- " + currentPlayer.getName() + "'s turn ---");
 
-        playTurn(currentPlayer);
-
+        if (!currentPlayer.isBankrupt())
+        {
+            playTurn(currentPlayer);
+		}
+        else {
+            m_ui.showMessage(currentPlayer.getName() + " is bankrupt and skipped.");
+        }
+        
         // Advance to next player
         m_currentPlayerIndex =
             (m_currentPlayerIndex + 1) % m_players.size();
     }
+	m_ui.showMessage("Game Over!");
 }
 
 void Game::setupPlayers()

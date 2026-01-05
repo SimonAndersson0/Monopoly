@@ -134,4 +134,15 @@ int GameManager::getSumOfLastRoll() const{
     return sum;
 }
 
+bool GameManager::isGameOver(const std::vector<Player> Players) const {
+    int activePlayers = 0;
+    for (const Player& player : Players) {
+        if (!player.isBankrupt()) {
+            activePlayers++;
+        }
+    }
+    return activePlayers <= 1;
+}
+
+
 //maybe centralize rent calcu here

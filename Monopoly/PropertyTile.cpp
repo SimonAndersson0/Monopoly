@@ -22,7 +22,7 @@ void PropertyTile::onLand(Player& player, GameManager& game)
     }
 }
 
-void PropertyTile::setOwner(Player& player)
+void PropertyTile::setOwner(Player* player)
 {
-    m_owner = &player;
+    m_owner = player;
 }

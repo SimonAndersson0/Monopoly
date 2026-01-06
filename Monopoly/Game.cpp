@@ -60,7 +60,7 @@ void Game::setupPlayers()
             controller = std::make_unique<ConsoleDecisionProvider>(m_ui);
 
         // Create player with controller
-        m_players.emplace_back(name, 1500, *controller);
+        m_players.emplace_back(name, 15000, *controller);
 
         // Store controller so it stays alive
         m_controllers.push_back(std::move(controller));
@@ -77,7 +77,7 @@ void Game::playTurn(Player& player)
 
     m_ui.showMessage("Rolled " + std::to_string(rollTotal));
 
-    // RULE: movement & pass-go handled here
+    // RULE: movement & pass-go in movePlayer
     Tile* landedTile = m_gameManager.movePlayer(player);
 
     m_ui.showMessage("You have: " + std::to_string(player.getMoney()));

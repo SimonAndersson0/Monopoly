@@ -44,7 +44,6 @@ void Player::payMoney(int amount)
     if (m_money < 0)
     {
         m_money = 0;
-        m_bankrupt = true;//maybe move this to manager
     }
 }
 

@@ -15,7 +15,7 @@ class PropertyTile :
 
         virtual int getRent() const = 0; //
         void onLand(Player& player, GameManager& game) override;
-		void setOwner(Player& player);
+		void setOwner(Player* player);
 		Player* getOwner() const { return m_owner; }
 		bool isMortgaged() const { return isMorgaged; }
 		void setMortgaged(bool mortgaged) { isMorgaged = mortgaged; }

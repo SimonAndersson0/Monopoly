@@ -28,7 +28,7 @@ Tile* GameManager::movePlayer(Player& player) //might change to just math instea
             steps -= toEnd;
             pos = 0;
 
-            giveMoney(player, 200);
+            giveMoney(player, 2000);
             // notify observers here if needed
         }
         else
@@ -74,7 +74,7 @@ bool GameManager::canAfford(const Player& player, int amount) const{
 void GameManager::buyProperty(Player& player, PropertyTile& property) {
     if (canAfford(player, property.getPrice())) {
         takeMoney(player, property.getPrice());
-        property.setOwner(player);
+        property.setOwner(&player);
         player.addProperty(property);
     }
 }
@@ -110,14 +110,24 @@ void GameManager::declareBankruptcy(Player& player, Player* creditor) {
     //declare bankruptcy
     player.declareBankruptcy();
     //transfer properties/money to creditor if any
-    
+    const std::vector<PropertyTile*>& properties = player.getProperties();
 
     if (creditor)
     {
-        // give properties or money to creditor
+        // give properties to creditor
+        for (PropertyTile* property : properties) {
+            player.removeProperty(*property);
+            property->setOwner(creditor);
+            creditor->addProperty(*property);
+		}
+
     }
     else {
         // return properties to bank
+        for (PropertyTile* property : properties) {
+            player.removeProperty(*property);
+            property->setOwner(nullptr);
+		}
 	}
 
 }

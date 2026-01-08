@@ -1,58 +1,32 @@
 #include "ConsoleUI.h"
 #include <iostream>
-#include <limits>
-#include <cctype>
+#include "Player.h"
+#include "Tile.h"
+#include "PropertyTile.h"
 
-void ConsoleUI::showMessage(const std::string& msg)
+void ConsoleUI::onTurnStarted(const Player& player)
 {
-    std::cout << msg << std::endl;
+    std::cout << "\n--- " << player.getName() << "'s turn ---\n";
 }
 
-void ConsoleUI::waitForEnter(const std::string& msg)
+void ConsoleUI::onDiceRolled(const Player& player, int total)
 {
-    std::cout << msg;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cout << player.getName() << " rolled " << total << "\n";
 }
 
-int ConsoleUI::askInt(const std::string& prompt)
+void ConsoleUI::onPlayerMoved(const Player& player, const Tile& tile)
 {
-    int value;
-    while (true)
-    {
-        std::cout << prompt << " ";
-        if (std::cin >> value)
-        {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            return value;
-        }
-
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Invalid number. Try again.\n";
-    }
+    std::cout << player.getName()
+        << " landed on " << tile.getName() << "\n";
 }
 
-std::string ConsoleUI::askString(const std::string& prompt)
+void ConsoleUI::onMoneyChanged(const Player& player, int amount)
 {
-    std::string value;
-    std::cout << prompt << " ";
-    std::getline(std::cin, value);
-    return value;
+    std::cout << player.getName()
+        << " now has $" << amount << "\n";
 }
 
-bool ConsoleUI::askYesNo(const std::string& prompt)
+void ConsoleUI::onGameOver()
 {
-    char input;
-    while (true)
-    {
-        std::cout << prompt << " (y/n): ";
-        std::cin >> input;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        input = std::tolower(input);
-        if (input == 'y') return true;
-        if (input == 'n') return false;
-
-        std::cout << "Invalid input. Please enter y or n.\n";
-    }
+    std::cout << "Game Over!\n";
 }

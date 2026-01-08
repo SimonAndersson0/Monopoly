@@ -5,13 +5,24 @@
 class ConsoleDecisionProvider : public DecisionProvider
 {
 public:
-    explicit ConsoleDecisionProvider(UI& ui) : m_ui(ui) {}
+    explicit ConsoleDecisionProvider(UI& ui)
+        : m_ui(ui) {
+    }
 
-    bool decideBuyProperty(Player& player, PropertyTile& property) override;
-    int decideAuctionBid(Player& player, PropertyTile& property, int currentBid) override;
-	PropertyTile* decideMortgageProperty(Player& player) override;
+    void waitForRoll(Player& player) override
+    {
+        m_ui.waitForRoll(player);
+    }
 
-    void waitForRoll(Player& player) override;
+    bool decideBuyProperty(Player& p, PropertyTile& prop) override
+    {
+        return m_ui.requestBuyProperty(p, prop);
+    }
+
+    PropertyTile* decideMortgageProperty(Player& p) override
+    {
+        return m_ui.requestMortgageProperty(p);
+    }
 
 private:
     UI& m_ui;

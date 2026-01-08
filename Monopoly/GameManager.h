@@ -5,6 +5,7 @@
 #include <queue>
 #include <memory>
 #include "Action.h"
+#include "GameObserver.h"
 
 class Player;
 class PropertyTile;
@@ -20,7 +21,7 @@ public:
     Tile* movePlayer(Player& player);
 
     // ---- Dice rolls ----
-    std::vector<int> rollDice();   // returns individual dice
+    std::vector<int> rollDice(const Player& player);   // returns individual dice
 	std::vector<int> getLastRoll() const { return m_lastRoll; }
     int getSumOfLastRoll() const;
 
@@ -41,7 +42,9 @@ public:
 	bool canMortgage(const Player& player, const PropertyTile& property) const;
     bool isGameOver(const std::vector<Player> Players) const;
 
-
+    void addObserver(GameObserver* observer);
+    void removeObserver(GameObserver* observer);
+	const std::vector<GameObserver*>& getObservers() const { return m_observers; }
 
 
 private:
@@ -51,6 +54,6 @@ private:
     std::vector<int> m_lastRoll;
     // Dice owned by the game manager
     Dice m_dice;
-
+    std::vector<GameObserver*> m_observers;
     
 };

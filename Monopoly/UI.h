@@ -1,17 +1,23 @@
 #pragma once
-#include <string>
+#include "GameObserver.h"
 
-class UI
+class Player;
+class PropertyTile;
+
+class UI : public GameObserver
 {
 public:
     virtual ~UI() = default;
 
-    // Output
-    virtual void showMessage(const std::string& msg) = 0;
+    // ---- Input requests (typed, contextual) ----
+    virtual void waitForRoll(const Player& player) = 0;
 
-    // Input
-    virtual void waitForEnter(const std::string& msg) = 0;
-    virtual int askInt(const std::string& prompt) = 0;
-    virtual std::string askString(const std::string& prompt) = 0;
-    virtual bool askYesNo(const std::string& prompt) = 0;
+    virtual bool requestBuyProperty(
+        const Player& player,
+        const PropertyTile& property
+    ) = 0;
+
+    virtual PropertyTile* requestMortgageProperty(
+        const Player& player
+    ) = 0;
 };

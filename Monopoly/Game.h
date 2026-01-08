@@ -1,15 +1,20 @@
 #pragma once
 
-#include "Board.h"
+#include "Board.h" // remove this 
 #include "GameManager.h"
-#include "Player.h"
-#include "UI.h"
-#include "Tile.h"
+
 
 #include <vector>
+#include <memory>
 #include <string>
 
 
+class Board; //dident work
+
+class Tile;
+class GameManager;
+class UI;
+class Player;
 class DecisionProvider;
 
 class Game

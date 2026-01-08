@@ -4,6 +4,12 @@
 #include "DecisionProvider.h"
 #include "ConsoleDecisionProvider.h"
 #include "BotDecisionProvider.h"
+#include "Player.h"
+#include "Board.h"
+
+#include "GameManager.h"
+#include "UI.h"
+#include "Tile.h"
 
 // Define destructor out-of-line so unique_ptr destructor is instantiated
 

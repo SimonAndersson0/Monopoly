@@ -15,4 +15,10 @@ public:
     void waitForRoll(const Player& player) override;
     bool requestBuyProperty(const Player&, const PropertyTile&) override;
     PropertyTile* requestMortgageProperty(const Player&) override;
+
+    //temp
+    void waitForEnter(const std::string& msg);
+    int askInt(const std::string& prompt);
+    std::string askString(const std::string& prompt);
+    bool askYesNo(const std::string& prompt);
 };

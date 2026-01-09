@@ -46,6 +46,11 @@ public:
     void removeObserver(GameObserver* observer);
 	const std::vector<GameObserver*>& getObservers() const { return m_observers; }
 
+    int calculateRent(const PropertyTile& property) const;
+    void chargeRent(Player& tenant, PropertyTile& property);
+	int countOwnedUtilities(const Player& player) const;
+	int countOwnedRailroads(const Player& player) const;
+
 
 private:
     const Board& m_board;

@@ -1,15 +1,16 @@
 #include "UtilityTile.h"
+#include "GameManager.h"
 
 //void UtilityTile::onLand(Player& player, GameManager& game)
 //{
 //    // Monopoly logic here
 //    // buy property, pay rent, etc.
 //}
-int UtilityTile::getPrice() const
+
+int UtilityTile::calculateRent(const GameManager& game) const
 {
-	return m_price;
-}
-int UtilityTile::getRent() const
-{
-	return m_rent; //rent on here is wierd since it needs to be calculated based on dice roll
+    int diceTotal = game.getSumOfLastRoll();
+    int owned = game.countOwnedUtilities(*getOwner());
+
+    return diceTotal * (owned == 1 ? 4 : 10);
 }

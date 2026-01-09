@@ -16,5 +16,6 @@ public:
     virtual void onGameOver() = 0;
     virtual void onPropertyBought(const Player&, const PropertyTile&) = 0;
     virtual void onBankruptcy(const Player&) = 0;
+    virtual void onPassGo(const Player&) = 0;
 
 };

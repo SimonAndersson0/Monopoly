@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Resources\boardspaces.xml" />
+    <Xml Include="Resources\BoardSpacesEn.xml" />
     <Xml Include="Resources\chancecards.xml" />
     <Xml Include="Resources\communitydeckcards.xml" />
   </ItemGroup>

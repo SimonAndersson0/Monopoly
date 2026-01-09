@@ -1,10 +1,19 @@
 #include "RailroadTile.h"
+#include <string>
+#include <vector>
+#include "GameManager.h"
+//int RailroadTile::getPrice() const
+//{
+//	return m_price;
+//}
+//std::vector<int> RailroadTile::getRent() const
+//{
+//	return m_rent;
+//}
 
-int RailroadTile::getPrice() const
+
+int RailroadTile::calculateRent(const GameManager& game) const
 {
-	return m_price;
-}
-int RailroadTile::getRent() const
-{
-	return m_rent;
+    int owned = game.countOwnedRailroads(*getOwner());
+    return 25 * (1 << (owned - 1)); // 25, 50, 100, 200
 }

@@ -14,11 +14,9 @@ void PropertyTile::onLand(Player& player, GameManager& game)
             std::make_unique<BuyPropertyAction>(player, *this)
         );
     }
-    else if (getOwner() != &player) // player does not own the property
+    else
     {
-        game.queueAction(
-            std::make_unique<PayMoneyAction>(player, getRent(), getOwner())
-        );
+        game.chargeRent(player, *this);
     }
 }
 

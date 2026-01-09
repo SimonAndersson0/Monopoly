@@ -1,8 +1,10 @@
 #include "GameManager.h"
+#include "GameObserver.h"
 #include "Player.h"
 #include "PropertyTile.h"
 #include "Board.h"
 #include "Tile.h"
+#include "PayMoneyAction.h"
 
 // Constructor: initializes board size and dice
 GameManager::GameManager(const Board& board, int diceAmount, int diceMaxValue)
@@ -26,6 +28,7 @@ Tile* GameManager::movePlayer(Player& player)
         {
             steps -= toEnd;
             pos = 0;
+
             giveMoney(player, 2000);
         }
         else
@@ -173,6 +176,29 @@ void GameManager::addObserver(GameObserver* observer)
 {
     m_observers.push_back(observer);
 }
+void GameManager::removeObserver(GameObserver* observer)
+{
+    m_observers.erase(
+        std::remove(
+            m_observers.begin(),
+            m_observers.end(),
+            observer
+        ),
+        m_observers.end()
+    );
+}
+
+int GameManager::calculateRent(const PropertyTile& property) const{
+    return property.calculateRent(*this);
+}
+
+//dont know if i want this
+void GameManager::chargeRent(Player& tenant, PropertyTile& property){
+    Player* owner = property.getOwner();
+    if (owner && owner != &tenant && !property.isMortgaged()) {
+        int rent = calculateRent(property);
+        queueAction(std::make_unique<PayMoneyAction>(tenant, rent, owner));
+    }
+}
 
 
-//maybe centralize rent calcu here

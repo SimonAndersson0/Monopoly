@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObserver.h"
+#include <string>
 
 class Player;
 class PropertyTile;
@@ -20,4 +21,12 @@ public:
     virtual PropertyTile* requestMortgageProperty(
         const Player& player
     ) = 0;
+    
+
+
+    //temp
+	virtual int requestPlayerCount() = 0;
+	virtual std::string requestPlayerName(int index) = 0;
+	virtual bool requestIsBot(const std::string& playerName) = 0;
+
 };

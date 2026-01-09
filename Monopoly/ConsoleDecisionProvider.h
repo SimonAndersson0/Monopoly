@@ -9,20 +9,14 @@ public:
         : m_ui(ui) {
     }
 
-    void waitForRoll(Player& player) override
-    {
-        m_ui.waitForRoll(player);
-    }
+    void waitForRoll(Player& player) override;
 
-    bool decideBuyProperty(Player& p, PropertyTile& prop) override
-    {
-        return m_ui.requestBuyProperty(p, prop);
-    }
 
-    PropertyTile* decideMortgageProperty(Player& p) override
-    {
-        return m_ui.requestMortgageProperty(p);
-    }
+    bool decideBuyProperty(Player& player, PropertyTile& property) override;
+
+
+    PropertyTile* decideMortgageProperty(Player& player) override;
+
 
 private:
     UI& m_ui;

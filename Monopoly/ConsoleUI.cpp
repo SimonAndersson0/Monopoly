@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "PropertyTile.h"
+#include "Decision.h"
 
 void ConsoleUI::onTurnStarted(const Player& player)
 {
@@ -153,4 +154,29 @@ bool ConsoleUI::askYesNo(const std::string& prompt)
 void ConsoleUI::showMessage(const std::string& msg)
 {
     std::cout << msg << "\n";
+}
+
+void ConsoleUI::onDecisionRequested(const Decision& decision)
+{
+    std::string decisionType;
+    switch (decision.type)
+    {
+    case Decision::Type::BuyProperty:
+        decisionType = "Buy Property";
+        break;
+    case Decision::Type::MortgageProperty:
+        decisionType = "Mortgage Property";
+        break;
+    case Decision::Type::Trade:
+        decisionType = "Trade";
+        break;
+    case Decision::Type::RollDice:
+        decisionType = "Roll Dice";
+        break;
+    default:
+        decisionType = "Unknown Decision";
+        break;
+    }
+    std::cout << "Decision requested: " << decisionType
+              << " for player " << decision.player->getName() << "\n";
 }

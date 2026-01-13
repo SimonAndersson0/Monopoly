@@ -6,11 +6,23 @@
 #include <memory>
 #include "Action.h"
 #include "GameObserver.h"
+#include <optional>
+#include "Decision.h"
 
 class Player;
 class PropertyTile;
 class Board;
 class Tile;
+
+enum class GameState
+{
+    Free,
+    ResolvingAction,
+    WaitingForDecision,
+    GameOver
+};
+
+
 
 class GameManager
 {
@@ -53,6 +65,11 @@ public:
 	bool doesPlayerOwnAllInSet(const Player& player, const PropertyTile& property) const;
 
 
+    //decisions
+    void submitDecisionResult(bool accepted);
+    //void submitDecisionResult(PropertyTile* property);
+    void requestDecision(const Decision& decision);
+
 private:
     const Board& m_board;
 	int m_totalMoney = 150000;
@@ -61,5 +78,7 @@ private:
     // Dice owned by the game manager
     Dice m_dice;
     std::vector<GameObserver*> m_observers;
+    std::optional<Decision> m_pendingDecision;
+    GameState m_state = GameState::Free;
     
 };

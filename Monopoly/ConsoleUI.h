@@ -1,6 +1,7 @@
 #pragma once
 #include "UI.h"
 #include <string>
+struct Decision;
 
 class ConsoleUI : public UI
 {
@@ -33,4 +34,6 @@ public:
     int askInt(const std::string& prompt);
     std::string askString(const std::string& prompt);
     bool askYesNo(const std::string& prompt);
+
+	void onDecisionRequested(const Decision& decision) override;
 };

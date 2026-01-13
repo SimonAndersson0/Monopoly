@@ -279,3 +279,26 @@ bool GameManager::doesPlayerOwnAllInSet(const Player& player, const PropertyTile
 }
 
 
+void GameManager::submitDecisionResult(bool accepted)
+{
+    if (!m_pendingDecision)
+        return;
+
+    auto& decision = *m_pendingDecision;
+
+    if (decision.type == Decision::Type::BuyProperty && accepted)
+    {
+        buyProperty(*decision.player, *decision.property);
+    }
+
+    m_pendingDecision.reset();
+    m_state = GameState::Free;
+}
+void GameManager::requestDecision(const Decision& decision)
+{
+    m_pendingDecision = decision;
+    m_state = GameState::WaitingForDecision;
+
+    for (auto* obs : m_observers)
+        obs->onDecisionRequested(decision);
+}

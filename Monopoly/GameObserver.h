@@ -3,6 +3,7 @@
 class Player;
 class Tile;
 class PropertyTile;
+struct Decision;
 
 class GameObserver
 {
@@ -17,5 +18,6 @@ public:
     virtual void onPropertyBought(const Player&, const PropertyTile&) = 0;
     virtual void onBankruptcy(const Player&) = 0;
     virtual void onPassGo(const Player&) = 0;
+    virtual void onDecisionRequested(const Decision& decision) = 0;
 
 };

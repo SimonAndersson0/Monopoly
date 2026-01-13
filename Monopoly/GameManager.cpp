@@ -6,6 +6,11 @@
 #include "Tile.h"
 #include "PayMoneyAction.h"
 
+//think these are needed for dynamic cast // check tile type when calculating rent
+#include "UtilityTile.h"
+#include "StreetTile.h"
+#include "railroadTile.h"
+
 // Constructor: initializes board size and dice
 GameManager::GameManager(const Board& board, int diceAmount, int diceMaxValue)
     : m_board(board),
@@ -29,7 +34,9 @@ Tile* GameManager::movePlayer(Player& player)
             steps -= toEnd;
             pos = 0;
 
-            giveMoney(player, 2000);
+            giveMoney(player, 200);
+            for (auto* obs : m_observers)
+				obs->onPassGo(player);
         }
         else
         {
@@ -199,6 +206,76 @@ void GameManager::chargeRent(Player& tenant, PropertyTile& property){
         int rent = calculateRent(property);
         queueAction(std::make_unique<PayMoneyAction>(tenant, rent, owner));
     }
+}
+
+   // IMPORTANT
+
+int GameManager::countOwnedUtilities(const Player& player) const
+{
+    int count = 0;
+
+    for (const auto& tilePtr : m_board.getTiles())
+    {
+        const Tile* tile = tilePtr.get();
+
+        // Check if this tile is a UtilityTile
+        const UtilityTile* utility =
+            dynamic_cast<const UtilityTile*>(tile);
+
+        if (!utility)
+            continue;
+
+        // Check ownership
+        if (utility->getOwner() == &player)
+            ++count;
+    }
+
+    return count;
+}
+
+int GameManager::countOwnedRailroads(const Player& player) const
+{
+    int count = 0;
+    for (const auto& tilePtr : m_board.getTiles())
+    {
+        const Tile* tile = tilePtr.get();
+        // Check if this tile is a RailroadTile
+        const RailroadTile* railroad =
+            dynamic_cast<const RailroadTile*>(tile);
+        if (!railroad)
+            continue;
+        // Check ownership
+        if (railroad->getOwner() == &player)
+            ++count;
+    }
+    return count;
+}
+bool GameManager::doesPlayerOwnAllInSet(const Player& player, const PropertyTile& property) const
+{
+    // First, we need to determine the color set of the given property
+    const StreetTile* streetProperty =
+        dynamic_cast<const StreetTile*>(&property);
+    if (!streetProperty)
+        return 0; // Not a street property, so no color set
+    std::string colorSet = streetProperty->getColorGroup();
+    // Now, count how many properties in this color set the player owns
+    int ownedCount = 0;
+    int totalCount = 0;
+    for (const auto& tilePtr : m_board.getTiles())
+    {
+        const Tile* tile = tilePtr.get();
+        const StreetTile* streetTile =
+            dynamic_cast<const StreetTile*>(tile);
+        if (!streetTile)
+            continue;
+        if (streetTile->getColorGroup() == colorSet)
+        {
+            ++totalCount;
+            if (streetTile->getOwner() == &player)
+                ++ownedCount;
+        }
+    }
+    return (ownedCount == totalCount);
 }
 
 

@@ -11,6 +11,7 @@
 //}
 int StreetTile::calculateRent(const GameManager& game) const
 {
+	int rent = 0;
 	int rentIndex = 0;
 	if (m_hasHotel) {
 		rentIndex = 5; // Hotel rent
@@ -19,5 +20,11 @@ int StreetTile::calculateRent(const GameManager& game) const
 		rentIndex = m_houses; // Rent based on number of houses
 	}
 	// Additional logic can be added here to check for color group ownership, etc.
-	return m_rent[rentIndex];
+	rent = m_rent[rentIndex];
+
+	if (rentIndex == 0 && game.doesPlayerOwnAllInSet(*getOwner(), *this )){
+		rent = rent * 2; //if player owns all colors from that set 2x rent
+	}
+
+	return rent;
 }

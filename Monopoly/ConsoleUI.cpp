@@ -39,7 +39,7 @@ void ConsoleUI::onBankruptcy(const Player& player)
     std::cout << player.getName() << " has declared bankruptcy!\n";
 }
 void ConsoleUI::onPassGo(const Player& player) {
-    showMessage(player.getName() + "Has passed go");
+    showMessage(player.getName() + " Has passed go");
 }
 
 

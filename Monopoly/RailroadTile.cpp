@@ -15,5 +15,6 @@
 int RailroadTile::calculateRent(const GameManager& game) const
 {
     int owned = game.countOwnedRailroads(*getOwner());
-    return 25 * (1 << (owned - 1)); // 25, 50, 100, 200
+    int rent = m_rent[owned];
+    return rent;
 }

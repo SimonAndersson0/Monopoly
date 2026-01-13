@@ -10,8 +10,8 @@ int main()
 {
     std::cout << "Welcome to monopol!\n";
     ConsoleUI ui;
-
-    Game game("Resources/boardspaces.xml", ui);
+    //old Resources/boardspaces.xml
+    Game game("Resources/BoardSpacesEn.xml", ui);
     game.run();
 
     return 0;

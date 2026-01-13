@@ -11,6 +11,6 @@ int UtilityTile::calculateRent(const GameManager& game) const
 {
     int diceTotal = game.getSumOfLastRoll();
     int owned = game.countOwnedUtilities(*getOwner());
-
-    return diceTotal * (owned == 1 ? 4 : 10);
+    int rent = m_rent[owned];
+    return diceTotal * rent;
 }

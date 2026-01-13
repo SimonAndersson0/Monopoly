@@ -50,6 +50,7 @@ public:
     void chargeRent(Player& tenant, PropertyTile& property);
 	int countOwnedUtilities(const Player& player) const;
 	int countOwnedRailroads(const Player& player) const;
+	bool doesPlayerOwnAllInSet(const Player& player, const PropertyTile& property) const;
 
 
 private:

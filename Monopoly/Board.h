@@ -19,6 +19,7 @@ public:
     // Access a tile by index
     Tile* getTileAt(int position) const;
     const std::vector<std::unique_ptr<Tile>>& getTiles() const { return m_tiles; }
+    
 
 	int getSize() const { return static_cast<int>(m_tiles.size()); }
 

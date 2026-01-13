@@ -43,6 +43,9 @@
     <Filter Include="Header Files\DecisionProvider">
       <UniqueIdentifier>{a35ff3a8-b079-4672-8990-3bac07ec889b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Observer">
+      <UniqueIdentifier>{4eb4906f-29ce-49b7-8fcd-0870a7bcfb3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Monopoly.cpp">
@@ -224,6 +227,12 @@
     <ClInclude Include="PayMoneyAction.h">
       <Filter>Header Files\Action</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObserver.h">
+      <Filter>Header Files\Observer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Resources\boardspaces.xml">
@@ -235,5 +244,10 @@
     <Xml Include="Resources\communitydeckcards.xml">
       <Filter>Resources</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Monopoly.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

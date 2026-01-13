@@ -1,38 +1,16 @@
 #include "BotDecisionProvider.h"
-#include <cstdlib>   // for rand()
-#include <ctime>     // for time()
+#include "Player.h"
+#include "PropertyTile.h"
 
-BotDecisionProvider::BotDecisionProvider() {
-    std::srand(static_cast<unsigned>(std::time(nullptr))); // seed random
+bool BotDecisionProvider::decideBuyProperty(
+    Player& player,
+    PropertyTile& property)
+{
+    return player.getMoney() > property.getPrice();
 }
 
-bool BotDecisionProvider::decideBuyProperty(Player& player, PropertyTile& property)
+PropertyTile* BotDecisionProvider::decideMortgageProperty(
+    Player&)
 {
-    if (player.getMoney() < property.getPrice())
-        return false; // cannot afford
-
-    return std::rand() % 2 == 0; // 50% chance to buy
-}
-
-int BotDecisionProvider::decideAuctionBid(Player& player, PropertyTile& property, int currentBid)
-{
-    int maxBid = player.getMoney();  // cannot bid more than what player has
-    int bid = currentBid + std::rand() % 50; // bid increment randomly
-
-    if (bid > maxBid) return 0; // pass
-    return bid;
-}
-PropertyTile* BotDecisionProvider::decideMortgageProperty(Player& player)
-{
-    for (auto* p : player.getProperties())
-        if (!p->isMortgaged())
-            return p;
-
     return nullptr;
-}
-
-void BotDecisionProvider::waitForRoll(Player&)
-{
-    // Do nothing
-    // Bot is always ready
 }

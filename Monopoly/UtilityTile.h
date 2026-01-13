@@ -1,15 +1,19 @@
 #pragma once
 #include "PropertyTile.h"
+#include <vector>
+#include <string>
+
+class GameManager;
+
 class UtilityTile :
     public PropertyTile
 {
     public:
-        explicit UtilityTile(const std::string& name, int price, int rent)
+        explicit UtilityTile(const std::string& name, int price, const std::vector<int>& rent)
             : PropertyTile(name, price, rent) {
         }
         //void onLand(Player& player, GameManager& game) override;
-        int getPrice() const override;
-        int getRent() const override;
+        int calculateRent(const GameManager& game) const override;
 
 
 };

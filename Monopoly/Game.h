@@ -2,14 +2,13 @@
 
 #include "Board.h" // remove this 
 #include "GameManager.h"
-
+#include "UI.h"
 
 #include <vector>
 #include <memory>
 #include <string>
 
 
-class Board; //dident work
 
 class Tile;
 class GameManager;

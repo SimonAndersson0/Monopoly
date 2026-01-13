@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MonopolyBoard>
+	<BoardSpaces>
+
+		<Space>
+			<Name>Go</Name>
+			<Type>Go</Type>
+		</Space>
+
+		<Space>
+			<Name>Mediterranean Avenue</Name>
+			<Type>Street</Type>
+			<Color>Brown</Color>
+			<Price>60</Price>
+			<Rent>2,10,30,90,160,250</Rent>
+			<HouseCost>50</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Community Chest</Name>
+			<Type>CommunityChest</Type>
+		</Space>
+
+		<Space>
+			<Name>Baltic Avenue</Name>
+			<Type>Street</Type>
+			<Color>Brown</Color>
+			<Price>60</Price>
+			<Rent>4,20,60,180,320,450</Rent>
+			<HouseCost>50</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Income Tax</Name>
+			<Type>Tax</Type>
+			<Amount>200</Amount>
+		</Space>
+
+		<Space>
+			<Name>Reading Railroad</Name>
+			<Type>TrainStation</Type>
+			<Price>200</Price>
+			<Rent>25,50,100,200</Rent>
+		</Space>
+
+		<Space>
+			<Name>Oriental Avenue</Name>
+			<Type>Street</Type>
+			<Color>LightBlue</Color>
+			<Price>100</Price>
+			<Rent>6,30,90,270,400,550</Rent>
+			<HouseCost>50</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Chance</Name>
+			<Type>Chance</Type>
+		</Space>
+
+		<Space>
+			<Name>Vermont Avenue</Name>
+			<Type>Street</Type>
+			<Color>LightBlue</Color>
+			<Price>100</Price>
+			<Rent>6,30,90,270,400,550</Rent>
+			<HouseCost>50</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Connecticut Avenue</Name>
+			<Type>Street</Type>
+			<Color>LightBlue</Color>
+			<Price>120</Price>
+			<Rent>8,40,100,300,450,600</Rent>
+			<HouseCost>50</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Jail / Just Visiting</Name>
+			<Type>Jail</Type>
+		</Space>
+
+		<Space>
+			<Name>St. Charles Place</Name>
+			<Type>Street</Type>
+			<Color>Purple</Color>
+			<Price>140</Price>
+			<Rent>10,50,150,450,625,750</Rent>
+			<HouseCost>100</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Electric Company</Name>
+			<Type>Utility</Type>
+			<Price>150</Price>
+			<Rent>4,10</Rent>
+		</Space>
+
+		<Space>
+			<Name>States Avenue</Name>
+			<Type>Street</Type>
+			<Color>Purple</Color>
+			<Price>140</Price>
+			<Rent>10,50,150,450,625,750</Rent>
+			<HouseCost>100</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Virginia Avenue</Name>
+			<Type>Street</Type>
+			<Color>Purple</Color>
+			<Price>160</Price>
+			<Rent>12,60,180,500,700,900</Rent>
+			<HouseCost>100</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Pennsylvania Railroad</Name>
+			<Type>TrainStation</Type>
+			<Price>200</Price>
+			<Rent>25,50,100,200</Rent>
+		</Space>
+
+		<Space>
+			<Name>St. James Place</Name>
+			<Type>Street</Type>
+			<Color>Orange</Color>
+			<Price>180</Price>
+			<Rent>14,70,200,550,750,950</Rent>
+			<HouseCost>100</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Community Chest</Name>
+			<Type>CommunityChest</Type>
+		</Space>
+
+		<Space>
+			<Name>Tennessee Avenue</Name>
+			<Type>Street</Type>
+			<Color>Orange</Color>
+			<Price>180</Price>
+			<Rent>14,70,200,550,750,950</Rent>
+			<HouseCost>100</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>New York Avenue</Name>
+			<Type>Street</Type>
+			<Color>Orange</Color>
+			<Price>200</Price>
+			<Rent>16,80,220,600,800,1000</Rent>
+			<HouseCost>100</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Free Parking</Name>
+			<Type>FreeParking</Type>
+		</Space>
+
+		<Space>
+			<Name>Kentucky Avenue</Name>
+			<Type>Street</Type>
+			<Color>Red</Color>
+			<Price>220</Price>
+			<Rent>18,90,250,700,875,1050</Rent>
+			<HouseCost>150</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Chance</Name>
+			<Type>Chance</Type>
+		</Space>
+
+		<Space>
+			<Name>Indiana Avenue</Name>
+			<Type>Street</Type>
+			<Color>Red</Color>
+			<Price>220</Price>
+			<Rent>18,90,250,700,875,1050</Rent>
+			<HouseCost>150</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>Illinois Avenue</Name>
+			<Type>Street</Type>
+			<Color>Red</Color>
+			<Price>240</Price>
+			<Rent>20,100,300,750,925,1100</Rent>
+			<HouseCost>150</HouseCost>
+		</Space>
+
+		<Space>
+			<Name>B.  O. Railroad</Name>
+			<Type>TrainStation</Type>
+			<Price>200</Price>
+			<Rent>25,50,100,200</Rent>
+		</Space>
+
+		<Space>
+			<Name>Luxury Tax</Name>
+			<Type>Tax</Type>
+			<Amount>100</Amount>
+		</Space>
+
+		<Space>
+			<Name>Boardwalk</Name>
+			<Type>Street</Type>
+			<Color>Blue</Color>
+			<Price>400</Price>
+			<Rent>50,200,600,1400,1700,2000</Rent>
+			<HouseCost>200</HouseCost>
+		</Space>
+
+	</BoardSpaces>
+</MonopolyBoard>

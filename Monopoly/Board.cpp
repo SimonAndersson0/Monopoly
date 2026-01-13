@@ -12,6 +12,8 @@
 #include "TaxTile.h"
 #include "FreeParkingTile.h"
 #include <iostream>
+#include <vector>
+#include <sstream>
 
 
 using namespace tinyxml2;
@@ -33,11 +35,24 @@ Tile* Board::getTileAt(int position) const
     return m_tiles[position].get();
 }
 
+static std::vector<int> parseRentVector(const char* rentText)
+{
+    std::vector<int> rents;
+    if (!rentText) return rents;
+
+    std::stringstream ss(rentText);
+    std::string item;
+
+    while (std::getline(ss, item, ','))
+    {
+        rents.push_back(std::stoi(item));
+    }
+
+    return rents;
+}
+
 void Board::loadFromXML(const std::string& xmlFilePath)
 {
-    //std::cout << "Loading board XML from: "
-    //    << xmlFilePath << std::endl;
-
     XMLDocument doc;
     if (doc.LoadFile(xmlFilePath.c_str()) != XML_SUCCESS)
     {
@@ -55,72 +70,80 @@ void Board::loadFromXML(const std::string& xmlFilePath)
         space;
         space = space->NextSiblingElement("Space"))
     {
-        const char* typeText = space->FirstChildElement("Type")->GetText();
-        const char* nameText = space->FirstChildElement("Name")->GetText();
+        XMLElement* typeElem = space->FirstChildElement("Type");
+        XMLElement* nameElem = space->FirstChildElement("Name");
+
+        const char* typeText = typeElem ? typeElem->GetText() : nullptr;
+        const char* nameText = nameElem ? nameElem->GetText() : nullptr;
+
         if (!typeText || !nameText) continue;
 
         std::string type = typeText;
         std::string name = nameText;
 
-        // We'll create the appropriate Tile subclass
         std::unique_ptr<Tile> tile;
 
         if (type == "Street")
         {
-            //std::cout << "street \n";
-            const char* colorText = space->FirstChildElement("Color")->GetText();
-			if (!colorText) continue;
-            std::string color = colorText;
+            XMLElement* colorElem = space->FirstChildElement("Color");
+            XMLElement* rentElem = space->FirstChildElement("Rent");
+
+            const char* colorText = colorElem ? colorElem->GetText() : nullptr;
+            const char* rentText = rentElem ? rentElem->GetText() : nullptr;
+
+            if (!colorText || !rentText) continue;
+
             int price = space->FirstChildElement("Price")->IntText();
-            int rent = space->FirstChildElement("Rent")->IntText();
             int houseCost = space->FirstChildElement("HouseCost")->IntText();
 
-            tile = std::make_unique<StreetTile>(name, price, rent, color, houseCost);
+            std::vector<int> rent = parseRentVector(rentText);
+
+            tile = std::make_unique<StreetTile>(name, price, rent, colorText, houseCost);
         }
         else if (type == "Utility")
         {
-            //std::cout << "util";
+            XMLElement* rentElem = space->FirstChildElement("Rent");
+            const char* rentText = rentElem ? rentElem->GetText() : nullptr;
+            if (!rentText) continue;
+
             int price = space->FirstChildElement("Price")->IntText();
-            int rent = space->FirstChildElement("Rent")->IntText();
+            std::vector<int> rent = parseRentVector(rentText);
+
             tile = std::make_unique<UtilityTile>(name, price, rent);
         }
         else if (type == "TrainStation")
         {
-            //std::cout << "train";
+            XMLElement* rentElem = space->FirstChildElement("Rent");
+            const char* rentText = rentElem ? rentElem->GetText() : nullptr;
+            if (!rentText) continue;
+
             int price = space->FirstChildElement("Price")->IntText();
-            int rent = space->FirstChildElement("Rent")->IntText();
+            std::vector<int> rent = parseRentVector(rentText);
+
             tile = std::make_unique<RailroadTile>(name, price, rent);
         }
         else if (type == "Go")
         {
-            //std::cout << "Go";
             tile = std::make_unique<GoTile>(name);
         }
         else if (type == "Jail")
         {
-            //std::cout << "jail";
             tile = std::make_unique<JailTile>(name);
         }
         else if (type == "Chance")
         {
-            //std::cout << "chans";
             tile = std::make_unique<CardTile>(name, CardTileType::Chance);
         }
         else if (type == "CommunityChest")
         {
-            //std::cout << "comm";
             tile = std::make_unique<CardTile>(name, CardTileType::CommunityChest);
         }
         else if (type == "FreeParking")
         {
-            //std::cout << "FreeP";
-
             tile = std::make_unique<FreeParkingTile>(name);
         }
         else if (type == "Tax")
         {
-            //std::cout << "Tax";
-
             int amount = space->FirstChildElement("Amount")->IntText();
             tile = std::make_unique<TaxTile>(name, amount);
         }
@@ -129,3 +152,5 @@ void Board::loadFromXML(const std::string& xmlFilePath)
             m_tiles.push_back(std::move(tile));
     }
 }
+
+

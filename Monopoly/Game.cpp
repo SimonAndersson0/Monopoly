@@ -26,49 +26,50 @@ void Game::run()
 {
     setupPlayers();
 
-    while (!m_gameManager.isGameOver(m_players)) // add proper game-over logic later
-    {
-        Player& currentPlayer = m_players[m_currentPlayerIndex];
-        m_ui.showMessage("\n--- " + currentPlayer.getName() + "'s turn ---");
+    // Register UI as observer ONCE
+    m_gameManager.addObserver(&m_ui);
 
-        if (!currentPlayer.isBankrupt())
+    while (!m_gameManager.isGameOver(m_players))
+    {
+        Player& player = m_players[m_currentPlayerIndex];
+
+
+        if (!player.isBankrupt())
         {
-            playTurn(currentPlayer);
-		}
-        else {
-            m_ui.showMessage(currentPlayer.getName() + " is bankrupt and skipped.");
+            for (auto* obs : m_gameManager.getObservers())
+                obs->onTurnStarted(player);
+
+            playTurn(player);
         }
-        
-        // Advance to next player
+
         m_currentPlayerIndex =
             (m_currentPlayerIndex + 1) % m_players.size();
     }
-	m_ui.showMessage("Game Over!");
+
+    for (auto* obs : m_gameManager.getObservers())
+        obs->onGameOver();
 }
 
 void Game::setupPlayers()
 {
-    int playerCount = m_ui.askInt("Enter number of players:");
+    int playerCount = m_ui.requestPlayerCount();
 
     for (int i = 0; i < playerCount; ++i)
     {
-        std::string name = m_ui.askString(
-            "Enter name for player " + std::to_string(i + 1) + ":"
-        );
+        std::string name = m_ui.requestPlayerName(i);
 
-        bool yesIsABot = m_ui.askYesNo("Is this player a bot?");
+        bool isBot = m_ui.requestIsBot(name);
+
+        UI* uiForPlayer = &m_ui; // shared UI by default
 
         std::unique_ptr<DecisionProvider> controller;
 
-        if (yesIsABot)
+        if (isBot)
             controller = std::make_unique<BotDecisionProvider>();
         else
-            controller = std::make_unique<ConsoleDecisionProvider>(m_ui);
+            controller = std::make_unique<ConsoleDecisionProvider>(*uiForPlayer);
 
-        // Create player with controller
         m_players.emplace_back(name, 15000, *controller);
-
-        // Store controller so it stays alive
         m_controllers.push_back(std::move(controller));
     }
 }
@@ -77,30 +78,12 @@ void Game::playTurn(Player& player)
 {
     player.controller().waitForRoll(player);
 
-    m_gameManager.rollDice();
+    m_gameManager.rollDice(player);
 
-    int rollTotal = m_gameManager.getSumOfLastRoll();
+    Tile* tile = m_gameManager.movePlayer(player);
 
-    m_ui.showMessage("Rolled " + std::to_string(rollTotal));
-
-    // RULE: movement & pass-go in movePlayer
-    Tile* landedTile = m_gameManager.movePlayer(player);
-
-    m_ui.showMessage("You have: " + std::to_string(player.getMoney()));
-
-    if (landedTile)
-    {
-        m_ui.showMessage("Landed on: " + landedTile->getName());
-        landedTile->onLand(player, m_gameManager);
-    }
-    else
-    {
-        // This should never happen if board is valid otherwise something is very wrong with the tile indexing or the board itself was not built correctly
-        m_ui.showMessage("Error: landed on an invalid tile!");
-    }
+    tile->onLand(player, m_gameManager);
 
     while (m_gameManager.hasPendingActions())
-    {
         m_gameManager.executeNextAction();
-    }
 }

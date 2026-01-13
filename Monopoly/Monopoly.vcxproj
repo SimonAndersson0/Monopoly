@@ -170,6 +170,7 @@
     <ClInclude Include="FreeParkingTile.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameObserver.h" />
     <ClInclude Include="GoTile.h" />
     <ClInclude Include="GoToJailTile.h" />
     <ClInclude Include="JailTile.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="PropertyTile.h" />
     <ClInclude Include="RailroadTile.h" />
     <ClInclude Include="RaiseMoneyAction.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="StreetTile.h" />
     <ClInclude Include="TaxTile.h" />
     <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h" />
@@ -187,8 +189,12 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Resources\boardspaces.xml" />
+    <Xml Include="Resources\BoardSpacesEn.xml" />
     <Xml Include="Resources\chancecards.xml" />
     <Xml Include="Resources\communitydeckcards.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Monopoly.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

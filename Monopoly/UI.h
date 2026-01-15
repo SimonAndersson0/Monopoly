@@ -18,7 +18,7 @@ public:
         const PropertyTile& property
     ) = 0;
 
-    virtual PropertyTile* requestMortgageProperty(
+    virtual int requestMortgageProperty(
         const Player& player
     ) = 0;
     

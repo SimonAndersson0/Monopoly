@@ -19,5 +19,9 @@ public:
         std::function<void(bool)> onDecided
     ) override;
 
-    void decideMortgageProperty(Player& player) override;
+    void decideMortgageProperty(
+        Player& player,
+        int requiredAmount,
+        std::function<void(int propertyId)> onDecided
+    ) override;
 };

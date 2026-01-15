@@ -18,8 +18,8 @@ void BuyPropertyAction::execute(GameManager& game)
     // Do NOT ask the controller here
     // Do NOT buy property here
 
-    game.requestDecision(Decision{
-        Decision::Type::BuyProperty,
+
+    game.requestDecision(BuyPropertyDecision{
         &m_player,
         &m_property
         });

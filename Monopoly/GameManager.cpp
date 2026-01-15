@@ -88,6 +88,8 @@ bool GameManager::giveMoney(Player& player, int amount)
 }
 bool GameManager::takeMoney(Player& player, int amount)
 {
+    if (!canAfford(player, amount))
+		return false;
     m_totalMoney += amount;
     player.payMoney(amount);
 
@@ -138,8 +140,15 @@ bool GameManager::canRaiseMoney(const Player& player, int amount) const{
     return player.calculateNetWorth() >= amount;
 }
 
-void GameManager::mortgageProperty(Player&, PropertyTile&) {
+void GameManager::mortgageProperty(Player& player, PropertyTile& property) {
 
+	if (canMortgage(player, property)) {
+        property.setMortgaged(true);
+        giveMoney(player, property.getMortgageValue());
+    }
+
+    for (auto* obs : m_observers)
+        obs->onMortgage(player, property);
 }
 void GameManager::declareBankruptcy(Player& player, Player* creditor)
 {
@@ -285,113 +294,114 @@ bool GameManager::doesPlayerOwnAllInSet(const Player& player, const PropertyTile
 
 //decisions
 //SUBMIT
-void GameManager::submitDecisionResult(const Decision& result)
+void GameManager::submitDecisionResult(const DecisionResult& result)
 {
-    if (!m_pendingDecision)
-        return;
-
-    const Decision decision = *m_pendingDecision;
-
-    switch (decision.type)
-    {
-    case Decision::Type::BuyProperty:
-    {
-        if (result.boolValue &&
-            canAfford(*decision.player, decision.property->getPrice()))
+    std::visit([this](auto&& r)
         {
-            buyProperty(*decision.player, *decision.property);
-        }
-        else
-        {
-            // later: start auction
-        }
-        break;
-    }
+            using T = std::decay_t<decltype(r)>;
 
-    case Decision::Type::RollDice:
-    {
-        // Dice logic belongs here, NOT in provider
-        m_lastRoll = m_dice.roll();
+            if constexpr (std::is_same_v<T, BuyPropertyResult>)
+            {
+                const auto& decision =
+                    std::get<BuyPropertyDecision>(*m_pendingDecision);
 
-        for (auto* obs : m_observers)
-            obs->onDiceRolled(*decision.player, getSumOfLastRoll());
+                if (r.accepted &&
+                    canAfford(*decision.player,
+                        decision.property->getPrice()))
+                {
+                    buyProperty(*decision.player, *decision.property);
+                }
+            }
+            else if constexpr (std::is_same_v<T, RollDiceResult>)
+            {
+                const auto& decision =
+                    std::get<RollDiceDecision>(*m_pendingDecision);
 
-        break;
-    }
-    case Decision::Type::MortgageProperty:
-    {
-        Tile* tile = m_board.getTileById(tileId);
-        auto* property = dynamic_cast<PropertyTile*>(tile);
+                Player& player = *decision.player;
 
-        if (!property || !canMortgage(*decision.player, *property))
-        {
-            // Ask again
-            queueAction(std::make_unique<RaiseMoneyAction>(
-                *decision.player,
-                decision.requiredAmount,
-                decision.creditor
-            ));
-        }
-        else
-        {
-            mortgageProperty(*decision.player, *property);
+                // 1. Roll dice (broadcasts event)
+                rollDice(player);
 
-            // Try again after mortgaging
-            queueAction(std::make_unique<RaiseMoneyAction>(
-                *decision.player,
-                decision.requiredAmount,
-                decision.creditor
-            ));
-        }
-    }
+                // 2. Move player
+                Tile* landedTile = movePlayer(player);
+
+                // 3. Trigger tile logic (THIS queues actions or decisions)
+                landedTile->onLand(player, *this);
+            }
+            else if constexpr (std::is_same_v<T, MortgageResult>)
+            {
+                Tile* tile = m_board.getTileById(r.propertyId);
+                auto* property = dynamic_cast<PropertyTile*>(tile);
+
+                const auto& decision =
+                    std::get<MortgagePropertyDecision>(*m_pendingDecision);
+
+                if (property && canMortgage(*decision.player, *property))
+                {
+                    mortgageProperty(*decision.player, *property);
+                }
+            }
+        }, result);
 
     m_pendingDecision.reset();
     m_state = GameState::Free;
 }
 
 //REQUEST
-void GameManager::requestDecision(const Decision& decision)
+void GameManager::requestDecision(const Decision & decision)
 {
     m_pendingDecision = decision;
     m_state = GameState::WaitingForDecision;
 
-    Player& player = *decision.player;
-    DecisionProvider& controller = player.controller();
+    std::visit([this](auto&& d)
+        {
+            Player& player = *d.player;
+            DecisionProvider& controller = player.controller();
 
-    switch (decision.type)
-    {
-    case Decision::Type::BuyProperty:
-    {
-        controller.decideBuyProperty(
-            player,
-            *decision.property,
-            [this](bool accepted)
-            {
-                Decision result;
-                result.type = Decision::Type::BuyProperty;
-                result.boolValue = accepted;
-                submitDecisionResult(result);
-            });
-        break;
-    }
+            using T = std::decay_t<decltype(d)>;
 
-    case Decision::Type::RollDice:
-    {
-        controller.waitForRoll(
-            player,
-            [this]()
+            if constexpr (std::is_same_v<T, BuyPropertyDecision>)
             {
-                Decision result;
-                result.type = Decision::Type::RollDice;
-                submitDecisionResult(result);
-            });
-        break;
-    }
-    }
+                controller.decideBuyProperty(
+                    player,
+                    *d.property,
+                    [this](bool accepted)
+                    {
+                        submitDecisionResult(
+                            BuyPropertyResult{ accepted }
+                        );
+                    }
+                );
+            }
+            else if constexpr (std::is_same_v<T, RollDiceDecision>)
+            {
+                controller.waitForRoll(
+                    player,
+                    [this]()
+                    {
+                        submitDecisionResult(RollDiceResult{});
+                    }
+                );
+            }
+            else if constexpr (std::is_same_v<T, MortgagePropertyDecision>)
+            {
+                controller.decideMortgageProperty(
+                    player,
+                    d.requiredAmount,
+                    [this](int propertyId)
+                    {
+                        submitDecisionResult(
+                            MortgageResult{ propertyId }
+                        );
+                    }
+                );
+            }
+        }, decision);
 
     for (auto* obs : m_observers)
         obs->onDecisionRequested(decision);
 }
+
 
 
 // Trade management

@@ -12,19 +12,23 @@ public:
         : m_ui(ui) {
     }
 
-    virtual void waitForRoll(
+    void waitForRoll(
         Player& player,
         std::function<void()> onRolled
     ) override;
 
     // Buy property  yes/no
-    virtual void decideBuyProperty(
+    void decideBuyProperty(
         Player& player,
         PropertyTile& property,
         std::function<void(bool)> onDecided
     ) override;
 
-    void decideMortgageProperty(Player& player) override;
+    void decideMortgageProperty(
+        Player& player,
+        int requiredAmount,
+        std::function<void(int propertyId)> onDecided
+    ) override;
 
 
 private:

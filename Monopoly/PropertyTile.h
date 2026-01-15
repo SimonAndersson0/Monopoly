@@ -24,6 +24,7 @@ class PropertyTile :
 		Player* getOwner() const { return m_owner; }
 		bool isMortgaged() const { return isMorgaged; }
 		void setMortgaged(bool mortgaged) { isMorgaged = mortgaged; }
+		int getMortgageValue() const { return m_price / 2; }
         virtual int calculateRent(const GameManager& game) const = 0;
 
     protected:

@@ -77,11 +77,17 @@ void Game::setupPlayers()
 void Game::playTurn(Player& player)
 {
     // Start the turn by requesting a roll
-    m_gameManager.requestDecision({
-        Decision::Type::RollDice,
-        &player,
-        nullptr
-        });
+    //m_gameManager.requestDecision({
+    //    Decision::Type::RollDice,
+    //    &player,
+    //    nullptr
+    //    });
+
+    m_gameManager.requestDecision(
+        RollDiceDecision{
+            &player
+        }
+    );
 
     // Let the game manager + controllers resolve everything
     while (true)

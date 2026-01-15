@@ -129,7 +129,10 @@ int Player::calculateNetWorth() const
     int totalWorth = m_money;
     for (const PropertyTile* property : m_properties)
     {
+        if (!property->isMortgaged()) {
         totalWorth += property->getPrice();
+        }
+        
     }
     return totalWorth;
 }

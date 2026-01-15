@@ -1,7 +1,7 @@
 #pragma once
 #include "UI.h"
 #include <string>
-struct Decision;
+
 struct TradeOffer;
 
 class ConsoleUI : public UI
@@ -17,12 +17,13 @@ public:
 	void onBankruptcy(const Player& player) override;
     void onPassGo(const Player& player) override;
     void onTradeProposed(const TradeOffer& trade) override;
+    void onMortgage(const Player& player, const PropertyTile& property) override;
 
 
     // Input
     void waitForRoll(const Player& player) override;
     bool requestBuyProperty(const Player&, const PropertyTile&) override;
-    PropertyTile* requestMortgageProperty(const Player&) override;
+    int requestMortgageProperty(const Player&) override;
 
     //temp solution for starting 
     int requestPlayerCount() override;

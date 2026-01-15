@@ -49,6 +49,11 @@ void ConsoleUI::onTradeProposed(const TradeOffer& trade)
 	std::cout << trade.proposer->getName() << " has proposed a trade to " << trade.target->getName() << "\n";
 }
 
+void ConsoleUI::onMortgage(const Player& player, const PropertyTile& property)
+{
+    showMessage(player.getName() + " Has morgaged " + property.getName());
+}
+
 
 //inputs
 void ConsoleUI::waitForRoll(const Player& player)
@@ -68,30 +73,44 @@ bool ConsoleUI::requestBuyProperty(
     return askYesNo(prompt);
 }
 
-PropertyTile* ConsoleUI::requestMortgageProperty(const Player& player)
+int ConsoleUI::requestMortgageProperty(const Player& player)
 {
     const auto& properties = player.getProperties();
 
     if (properties.empty())
     {
         showMessage("You own no properties to mortgage.");
-        return nullptr;
+        return -1;
     }
-
-    showMessage("Choose a property to mortgage (0 to cancel):");
-
+	std::cout << "Your properties:\n";
     for (size_t i = 0; i < properties.size(); ++i)
     {
-        std::cout << i + 1 << ": "
-            << properties[i]->getName() << "\n";
+        const auto& prop = properties[i];
+        std::cout << i + 1 << ". " << prop->getName()
+			<< "(ID: )" << prop->getID()
+            << " (Price: $" << prop->getPrice()
+            << ", Mortgaged: " << (prop->isMortgaged() ? "Yes" : "No") << ")\n";
     }
+	while (true) //loop till choice is valid or cancelled
+    {
+        int choice = askInt("Enter the ID of the property to mortgage (or 0 to cancel):");
+        if (choice == 0)
+        {
+            showMessage("Mortgage cancelled.");
+            return -1;
+		}
+        for (const auto& prop : properties)
+        {
+            if (prop->getID() == choice)
+            {
+                return prop->getID();
+            }
+            else {
+                showMessage("Invalid property ID. Try again.");
+			}
+        }
+	}
 
-    int choice = askInt("Your choice:");
-
-    if (choice <= 0 || choice > static_cast<int>(properties.size()))
-        return nullptr;
-
-    return properties[choice - 1];
 }
 
 //temp solution for starting 
@@ -164,25 +183,7 @@ void ConsoleUI::showMessage(const std::string& msg)
 
 void ConsoleUI::onDecisionRequested(const Decision& decision)
 {
-    std::string decisionType;
-    switch (decision.type)
-    {
-    case Decision::Type::BuyProperty:
-        decisionType = "Buy Property";
-        break;
-    //case Decision::Type::MortgageProperty:
-    //    decisionType = "Mortgage Property";
-    //    break;
-    //case Decision::Type::Trade:
-    //    decisionType = "Trade";
-    //    break;
-    case Decision::Type::RollDice:
-        decisionType = "Roll Dice";
-        break;
-    default:
-        decisionType = "Unknown Decision";
-        break;
-    }
-    std::cout << "Decision requested: " << decisionType
-              << " for player " << decision.player->getName() << "\n";
+
+    std::cout << "Decision requested: " ;
+              
 }

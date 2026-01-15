@@ -22,6 +22,13 @@ void ConsoleDecisionProvider::decideBuyProperty(
     onDecided(buy);
 }
 
-void ConsoleDecisionProvider::decideMortgageProperty(Player& player) {
+void ConsoleDecisionProvider::decideMortgageProperty(
+    Player& player,
+    int requiredAmount,
+    std::function<void(int propertyId)> onDecided
+) {
+    int propertyId = m_ui.requestMortgageProperty(player);
+
+	onDecided(propertyId);
 
 }

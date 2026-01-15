@@ -4,7 +4,9 @@ struct TradeOffer;
 class Player;
 class Tile;
 class PropertyTile;
-struct Decision;
+
+#include "Decision.h"
+
 
 class GameObserver
 {
@@ -21,5 +23,6 @@ public:
     virtual void onPassGo(const Player&) = 0;
     virtual void onDecisionRequested(const Decision& decision) = 0;
 	virtual void onTradeProposed(const TradeOffer& trade) = 0;
+    virtual void onMortgage(const Player& player, const PropertyTile& property) = 0;
 
 };

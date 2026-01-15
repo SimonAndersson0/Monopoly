@@ -1,27 +1,21 @@
+// Decision.h
 #pragma once
-class Player;
-class PropertyTile;
+#include <variant>
+#include "DecisionTypes.h"
 
-struct Decision
-{
-    enum class Type
-    {
-        RollDice,
-        BuyProperty,
-        MortgageProperty,
-        // later:
-        // AuctionBid,
-        // Trade,
-        // Mortgage
-    };
+//ask
+using Decision = std::variant<
+    RollDiceDecision,
+    BuyPropertyDecision,
+    MortgagePropertyDecision
+    // later:
+    // AuctionBidDecision,
+    // TradeDecision
+>;
 
-    Type type;
-    Player* player = nullptr;
-
-    // payloads (only one used depending on type)
-    PropertyTile* property = nullptr;
-    int intValue = 0;     // e.g. dice roll, auction bid
-    Player* Creditor;
-    bool boolValue = false;
-};
-
+//resolve
+using DecisionResult = std::variant<
+    RollDiceResult,
+    BuyPropertyResult,
+    MortgageResult
+>;

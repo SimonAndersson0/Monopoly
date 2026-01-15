@@ -14,7 +14,7 @@ void PropertyTile::onLand(Player& player, GameManager& game)
             std::make_unique<BuyPropertyAction>(player, *this)
         );
     }
-    else
+    else if(!isMortgaged())
     {
         game.chargeRent(player, *this);
     }

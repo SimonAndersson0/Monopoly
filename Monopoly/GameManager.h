@@ -67,9 +67,12 @@ public:
 
 
     //decisions
-    void submitDecisionResult(const Decision& result);
-    //void submitDecisionResult(PropertyTile* property);
+
+    void submitDecisionResult(const DecisionResult& result);
     void requestDecision(const Decision& decision);
+    //void submitDecisionResult(PropertyTile* property);
+    // 
+    //gamestate
     GameState getState() const { return m_state; }
     const Decision& getPendingDecision() const { return *m_pendingDecision; }
 

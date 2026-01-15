@@ -171,6 +171,7 @@
     <ClInclude Include="ConsoleUI.h" />
     <ClInclude Include="Decision.h" />
     <ClInclude Include="DecisionProvider.h" />
+    <ClInclude Include="DecisionTypes.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="FreeParkingTile.h" />
     <ClInclude Include="Game.h" />

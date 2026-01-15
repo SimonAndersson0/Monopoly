@@ -19,8 +19,15 @@ void BotDecisionProvider::decideBuyProperty(
     bool buy = true;
     onDecided(buy);
 }
-
-void BotDecisionProvider::decideMortgageProperty(Player& player) {
-
+void BotDecisionProvider::decideMortgageProperty(
+    Player& player,
+    int requiredAmount,
+    std::function<void(int propertyId)> onDecided
+){
+   int propertyId;
+   player.getProperties().empty() ? propertyId = -1 : propertyId = player.getProperties().front()->getID(); //mortgage first property if any
+   onDecided(propertyId);
 }
+
+
 

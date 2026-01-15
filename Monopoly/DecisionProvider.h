@@ -22,7 +22,11 @@ public:
         std::function<void(bool)> onDecided
     ) = 0;
 
-    virtual void decideMortgageProperty(Player& player) = 0;
+    virtual void decideMortgageProperty(
+        Player& player,
+		int requiredAmount,
+		std::function<void(int propertyId)> onDecided
+    ) = 0;
 
     // You will add more later:
     // mortgage

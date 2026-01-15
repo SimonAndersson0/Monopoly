@@ -11,6 +11,7 @@
 #include "CardTileType.h"
 #include "TaxTile.h"
 #include "FreeParkingTile.h"
+#include <string>
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -33,6 +34,19 @@ Tile* Board::getTileAt(int position) const
     if (position < 0 || position >= static_cast<int>(m_tiles.size()))
         return nullptr;
     return m_tiles[position].get();
+}
+
+Tile* Board::getTileById(int id) const
+{
+    for (const auto& tilePtr : m_tiles)
+    {
+        if (tilePtr->getID() == id)
+        {
+            return tilePtr.get();
+        }
+    }
+
+    return nullptr; // not found
 }
 
 static std::vector<int> parseRentVector(const char* rentText)
@@ -70,6 +84,8 @@ void Board::loadFromXML(const std::string& xmlFilePath)
         space;
         space = space->NextSiblingElement("Space"))
     {
+		int ID = m_nextTileID++;
+
         XMLElement* typeElem = space->FirstChildElement("Type");
         XMLElement* nameElem = space->FirstChildElement("Name");
 
@@ -98,7 +114,7 @@ void Board::loadFromXML(const std::string& xmlFilePath)
 
             std::vector<int> rent = parseRentVector(rentText);
 
-            tile = std::make_unique<StreetTile>(name, price, rent, colorText, houseCost);
+            tile = std::make_unique<StreetTile>(ID, name, price, rent, colorText, houseCost);
         }
         else if (type == "Utility")
         {
@@ -109,7 +125,7 @@ void Board::loadFromXML(const std::string& xmlFilePath)
             int price = space->FirstChildElement("Price")->IntText();
             std::vector<int> rent = parseRentVector(rentText);
 
-            tile = std::make_unique<UtilityTile>(name, price, rent);
+            tile = std::make_unique<UtilityTile>(ID, name, price, rent);
         }
         else if (type == "TrainStation")
         {
@@ -120,32 +136,32 @@ void Board::loadFromXML(const std::string& xmlFilePath)
             int price = space->FirstChildElement("Price")->IntText();
             std::vector<int> rent = parseRentVector(rentText);
 
-            tile = std::make_unique<RailroadTile>(name, price, rent);
+            tile = std::make_unique<RailroadTile>(ID, name, price, rent);
         }
         else if (type == "Go")
         {
-            tile = std::make_unique<GoTile>(name);
+            tile = std::make_unique<GoTile>(ID,name);
         }
         else if (type == "Jail")
         {
-            tile = std::make_unique<JailTile>(name);
+            tile = std::make_unique<JailTile>(ID, name);
         }
         else if (type == "Chance")
         {
-            tile = std::make_unique<CardTile>(name, CardTileType::Chance);
+            tile = std::make_unique<CardTile>(ID, name, CardTileType::Chance);
         }
         else if (type == "CommunityChest")
         {
-            tile = std::make_unique<CardTile>(name, CardTileType::CommunityChest);
+            tile = std::make_unique<CardTile>(ID, name, CardTileType::CommunityChest);
         }
         else if (type == "FreeParking")
         {
-            tile = std::make_unique<FreeParkingTile>(name);
+            tile = std::make_unique<FreeParkingTile>(ID, name);
         }
         else if (type == "Tax")
         {
             int amount = space->FirstChildElement("Amount")->IntText();
-            tile = std::make_unique<TaxTile>(name, amount);
+            tile = std::make_unique<TaxTile>(ID, name, amount);
         }
 
         if (tile)

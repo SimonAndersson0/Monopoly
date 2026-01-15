@@ -1,5 +1,7 @@
 #pragma once
 #include "ActionTile.h"
+#include <string>
+
 class Player;
 class GameManager;
 
@@ -7,9 +9,9 @@ class TaxTile :
     public ActionTile
 {
     public:
-        explicit TaxTile(const std::string& name, int taxAmount)
+        explicit TaxTile(const int& ID, const std::string& name, int taxAmount)
 
-            : ActionTile(name), m_taxAmount(taxAmount) {}
+            : ActionTile(ID,name), m_taxAmount(taxAmount) {}
 
         void onLand(Player& player, GameManager& game) override;
 

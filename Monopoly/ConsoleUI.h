@@ -2,6 +2,7 @@
 #include "UI.h"
 #include <string>
 struct Decision;
+struct TradeOffer;
 
 class ConsoleUI : public UI
 {
@@ -15,7 +16,7 @@ public:
 	void onPropertyBought(const Player& player, const PropertyTile& property) override;
 	void onBankruptcy(const Player& player) override;
     void onPassGo(const Player& player) override;
-
+    void onTradeProposed(const TradeOffer& trade) override;
 
 
     // Input
@@ -36,4 +37,5 @@ public:
     bool askYesNo(const std::string& prompt);
 
 	void onDecisionRequested(const Decision& decision) override;
+
 };

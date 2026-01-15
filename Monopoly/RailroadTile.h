@@ -9,8 +9,8 @@ class RailroadTile :
     public PropertyTile
 {
     public:
-        explicit RailroadTile(const std::string& name, int price, const std::vector<int>& rent)
-            : PropertyTile(name, price, rent)
+        explicit RailroadTile(const int& ID, const std::string& name, int price, const std::vector<int>& rent)
+            : PropertyTile(ID,name, price, rent)
 		{
 		}
      /*   int getPrice() const override;

@@ -1,17 +1,23 @@
 #pragma once
 #include "DecisionProvider.h"
+#include <functional>
+class Player;
+class PropertyTile;
 
 class BotDecisionProvider : public DecisionProvider
 {
 public:
-    void waitForRoll(Player&) override {}
-
-    bool decideBuyProperty(
+    virtual void waitForRoll(
         Player& player,
-        PropertyTile& property
+        std::function<void()> onRolled
     ) override;
 
-    PropertyTile* decideMortgageProperty(
-        Player& player
+    // Buy property  yes/no
+    virtual void decideBuyProperty(
+        Player& player,
+        PropertyTile& property,
+        std::function<void(bool)> onDecided
     ) override;
+
+    void decideMortgageProperty(Player& player) override;
 };

@@ -8,6 +8,7 @@
 #include "GameObserver.h"
 #include <optional>
 #include "Decision.h"
+#include "TradeOffer.h"
 
 class Player;
 class PropertyTile;
@@ -66,9 +67,18 @@ public:
 
 
     //decisions
-    void submitDecisionResult(bool accepted);
+    void submitDecisionResult(const Decision& result);
     //void submitDecisionResult(PropertyTile* property);
     void requestDecision(const Decision& decision);
+    GameState getState() const { return m_state; }
+    const Decision& getPendingDecision() const { return *m_pendingDecision; }
+
+    //trades
+    bool canCommitTrades() const;
+    void proposeTrade(const TradeOffer& trade);
+    void acceptTrade(size_t index, Player& who);
+    void processTrades();
+    void executeTrade(const TradeOffer& trade);
 
 private:
     const Board& m_board;
@@ -80,5 +90,5 @@ private:
     std::vector<GameObserver*> m_observers;
     std::optional<Decision> m_pendingDecision;
     GameState m_state = GameState::Free;
-    
+    std::vector<TradeOffer> m_pendingTrades;
 };

@@ -1,16 +1,26 @@
 #include "BotDecisionProvider.h"
 #include "Player.h"
 #include "PropertyTile.h"
+#include <functional>
 
-bool BotDecisionProvider::decideBuyProperty(
+
+void BotDecisionProvider::waitForRoll(
     Player& player,
-    PropertyTile& property)
+    std::function<void()> onRolled)
 {
-    return player.getMoney() > property.getPrice();
+    onRolled(); // bot rolls immediately //remove the 0 not needed
 }
 
-PropertyTile* BotDecisionProvider::decideMortgageProperty(
-    Player&)
+void BotDecisionProvider::decideBuyProperty(
+    Player& player,
+    PropertyTile& property,
+    std::function<void(bool)> onDecided)
 {
-    return nullptr;
+    bool buy = true;
+    onDecided(buy);
 }
+
+void BotDecisionProvider::decideMortgageProperty(Player& player) {
+
+}
+

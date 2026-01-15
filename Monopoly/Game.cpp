@@ -6,6 +6,9 @@
 #include "BotDecisionProvider.h"
 #include "Player.h"
 #include "Board.h"
+#include <thread>
+#include <chrono>
+#include "Decision.h"
 
 #include "GameManager.h"
 #include "UI.h"
@@ -25,14 +28,11 @@ Game::Game(const std::string& boardXmlPath, UI& ui)
 void Game::run()
 {
     setupPlayers();
-
-    // Register UI as observer ONCE
     m_gameManager.addObserver(&m_ui);
 
     while (!m_gameManager.isGameOver(m_players))
     {
         Player& player = m_players[m_currentPlayerIndex];
-
 
         if (!player.isBankrupt())
         {
@@ -76,14 +76,32 @@ void Game::setupPlayers()
 
 void Game::playTurn(Player& player)
 {
-    player.controller().waitForRoll(player);
+    // Start the turn by requesting a roll
+    m_gameManager.requestDecision({
+        Decision::Type::RollDice,
+        &player,
+        nullptr
+        });
 
-    m_gameManager.rollDice(player);
+    // Let the game manager + controllers resolve everything
+    while (true)
+    {
+        // If we're waiting for a decision, do NOTHING
+        // UI / bots will submitDecisionResult()
+        if (m_gameManager.getState() == GameState::WaitingForDecision)
+        {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Small sleep to prevent busy-waiting
+            continue;
+        }
 
-    Tile* tile = m_gameManager.movePlayer(player);
+        // Execute queued actions (rent, buy property, etc.)
+        if (m_gameManager.hasPendingActions())
+        {
+            m_gameManager.executeNextAction();
+            continue;
+        }
 
-    tile->onLand(player, m_gameManager);
-
-    while (m_gameManager.hasPendingActions())
-        m_gameManager.executeNextAction();
+        // Nothing left to resolve turn ends
+        break;
+    }
 }

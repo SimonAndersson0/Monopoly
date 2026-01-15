@@ -4,7 +4,7 @@ class ActionTile :
     public Tile
 {
     public:
-		explicit ActionTile(const std::string& name) : Tile(name) {}
+		explicit ActionTile(const int& ID, const std::string& name) : Tile(ID,name) {}
 
 };
 

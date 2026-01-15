@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include "PropertyTile.h"
 #include "Decision.h"
+#include "TradeOffer.h"
 
 void ConsoleUI::onTurnStarted(const Player& player)
 {
@@ -41,6 +42,11 @@ void ConsoleUI::onBankruptcy(const Player& player)
 }
 void ConsoleUI::onPassGo(const Player& player) {
     showMessage(player.getName() + " Has passed go");
+}
+
+void ConsoleUI::onTradeProposed(const TradeOffer& trade)
+{
+	std::cout << trade.proposer->getName() << " has proposed a trade to " << trade.target->getName() << "\n";
 }
 
 
@@ -164,12 +170,12 @@ void ConsoleUI::onDecisionRequested(const Decision& decision)
     case Decision::Type::BuyProperty:
         decisionType = "Buy Property";
         break;
-    case Decision::Type::MortgageProperty:
-        decisionType = "Mortgage Property";
-        break;
-    case Decision::Type::Trade:
-        decisionType = "Trade";
-        break;
+    //case Decision::Type::MortgageProperty:
+    //    decisionType = "Mortgage Property";
+    //    break;
+    //case Decision::Type::Trade:
+    //    decisionType = "Trade";
+    //    break;
     case Decision::Type::RollDice:
         decisionType = "Roll Dice";
         break;

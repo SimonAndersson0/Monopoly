@@ -30,6 +30,7 @@ private:
     void setupPlayers();
     void playTurn(Player& player);
 
+
     // Core systems
 	bool m_gameIsOn = true;
     Board m_board;

@@ -11,10 +11,15 @@ class Tile
 
 		virtual void onLand(Player& player, GameManager& game) = 0;
 
-		explicit Tile(const std::string& name) : m_name(name) {}
+		explicit Tile(const int& ID, const std::string& name);
 
 		std::string getName() const { return m_name; }
+		int getID() const { return m_ID; }
 	private:
+		
+	protected:
 		std::string m_name;
+		int m_ID;
+
 };
 

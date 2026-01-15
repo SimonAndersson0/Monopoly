@@ -4,6 +4,9 @@
 #include "PayMoneyAction.h"
 #include "BankruptcyAction.h"
 #include "DecisionProvider.h"
+#include "Decision.h"
+
+#include <memory>
 
 RaiseMoneyAction::RaiseMoneyAction(
     Player& player,
@@ -17,18 +20,30 @@ RaiseMoneyAction::RaiseMoneyAction(
 }
 void RaiseMoneyAction::execute(GameManager& game)
 {
-    // If we already have enough cash  continue
+    // If we already have enough cash, continue
     if (m_player.getMoney() >= m_requiredAmount)
     {
         game.queueAction(
             std::make_unique<PayMoneyAction>(
-                m_player, m_requiredAmount , m_creditor
+                m_player,
+                m_requiredAmount,
+                m_creditor
             )
         );
         return;
     }
 
-    // Ask PLAYER (via DecisionProvider), not GameManager
+    // Ask the GameManager to request a decision
+    game.requestDecision({
+        Decision::Type::MortgageProperty,
+        &m_player,
+        nullptr,              // no property yet
+        m_requiredAmount,     // optional context
+        m_creditor            // optional context
+        });
+
+
+    //MOVE LOGIC TO SUBMIT
     PropertyTile* property =
         m_player.controller().decideMortgageProperty(m_player);
 

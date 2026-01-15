@@ -1,5 +1,6 @@
 #pragma once
 
+struct TradeOffer;
 class Player;
 class Tile;
 class PropertyTile;
@@ -19,5 +20,6 @@ public:
     virtual void onBankruptcy(const Player&) = 0;
     virtual void onPassGo(const Player&) = 0;
     virtual void onDecisionRequested(const Decision& decision) = 0;
+	virtual void onTradeProposed(const TradeOffer& trade) = 0;
 
 };

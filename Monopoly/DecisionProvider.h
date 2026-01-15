@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 
 class Player;
 class PropertyTile;
@@ -8,7 +9,24 @@ class DecisionProvider
 public:
     virtual ~DecisionProvider() = default;
 
-    virtual void waitForRoll(Player& player) = 0;
-    virtual bool decideBuyProperty(Player& player, PropertyTile& property) = 0;
-    virtual PropertyTile* decideMortgageProperty(Player& player) = 0;
+    // Roll dice  no value needed, just "ready"
+    virtual void waitForRoll(
+        Player& player,
+        std::function<void()> onRolled
+    ) = 0;
+
+    // Buy property  yes/no
+    virtual void decideBuyProperty(
+        Player& player,
+        PropertyTile& property,
+        std::function<void(bool)> onDecided
+    ) = 0;
+
+    virtual void decideMortgageProperty(Player& player) = 0;
+
+    // You will add more later:
+    // mortgage
+    // trade
+    // auction bid
 };
+

@@ -6,16 +6,22 @@ struct Decision
 {
     enum class Type
     {
+        RollDice,
         BuyProperty,
         MortgageProperty,
-        Trade,
-        RollDice
+        // later:
+        // AuctionBid,
+        // Trade,
+        // Mortgage
     };
 
     Type type;
     Player* player = nullptr;
 
-    // payload
+    // payloads (only one used depending on type)
     PropertyTile* property = nullptr;
+    int intValue = 0;     // e.g. dice roll, auction bid
+    Player* Creditor;
+    bool boolValue = false;
 };
 

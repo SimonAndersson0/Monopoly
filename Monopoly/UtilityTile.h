@@ -9,8 +9,8 @@ class UtilityTile :
     public PropertyTile
 {
     public:
-        explicit UtilityTile(const std::string& name, int price, const std::vector<int>& rent)
-            : PropertyTile(name, price, rent) {
+        explicit UtilityTile(const int& ID, const std::string& name, int price, const std::vector<int>& rent)
+            : PropertyTile(ID, name, price, rent) {
         }
         //void onLand(Player& player, GameManager& game) override;
         int calculateRent(const GameManager& game) const override;

@@ -10,8 +10,8 @@ class PropertyTile :
     public Tile
 {
     public:
-        explicit PropertyTile(const std::string& name, int price, const std::vector<int>& rent) //constructor
-            : Tile(name),
+        explicit PropertyTile(const int& ID, const std::string& name, int price, const std::vector<int>& rent) //constructor
+            : Tile(ID,name),
             m_price(price),
 			m_rent(rent)
             {}

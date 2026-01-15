@@ -5,6 +5,9 @@
 #include "Board.h"
 #include "Tile.h"
 #include "PayMoneyAction.h"
+#include "TradeOffer.h"
+#include "Decision.h"
+#include "DecisionProvider.h"
 
 //think these are needed for dynamic cast // check tile type when calculating rent
 #include "UtilityTile.h"
@@ -110,6 +113,7 @@ void GameManager::buyProperty(Player& player, PropertyTile& property)
     }
 }
 
+//action
 void GameManager::queueAction(std::unique_ptr<Action> action)
 {
     m_actions.push(std::move(action));
@@ -179,6 +183,7 @@ bool GameManager::isGameOver(const std::vector<Player> Players) const {
     return activePlayers <= 1;
 }
 
+//observers
 void GameManager::addObserver(GameObserver* observer)
 {
     m_observers.push_back(observer);
@@ -199,7 +204,7 @@ int GameManager::calculateRent(const PropertyTile& property) const{
     return property.calculateRent(*this);
 }
 
-//dont know if i want this
+
 void GameManager::chargeRent(Player& tenant, PropertyTile& property){
     Player* owner = property.getOwner();
     if (owner && owner != &tenant && !property.isMortgaged()) {
@@ -208,7 +213,7 @@ void GameManager::chargeRent(Player& tenant, PropertyTile& property){
     }
 }
 
-   // IMPORTANT
+   
 
 int GameManager::countOwnedUtilities(const Player& player) const
 {
@@ -232,7 +237,6 @@ int GameManager::countOwnedUtilities(const Player& player) const
 
     return count;
 }
-
 int GameManager::countOwnedRailroads(const Player& player) const
 {
     int count = 0;
@@ -279,26 +283,172 @@ bool GameManager::doesPlayerOwnAllInSet(const Player& player, const PropertyTile
 }
 
 
-void GameManager::submitDecisionResult(bool accepted)
+//decisions
+//SUBMIT
+void GameManager::submitDecisionResult(const Decision& result)
 {
     if (!m_pendingDecision)
         return;
 
-    auto& decision = *m_pendingDecision;
+    const Decision decision = *m_pendingDecision;
 
-    if (decision.type == Decision::Type::BuyProperty && accepted)
+    switch (decision.type)
     {
-        buyProperty(*decision.player, *decision.property);
+    case Decision::Type::BuyProperty:
+    {
+        if (result.boolValue &&
+            canAfford(*decision.player, decision.property->getPrice()))
+        {
+            buyProperty(*decision.player, *decision.property);
+        }
+        else
+        {
+            // later: start auction
+        }
+        break;
+    }
+
+    case Decision::Type::RollDice:
+    {
+        // Dice logic belongs here, NOT in provider
+        m_lastRoll = m_dice.roll();
+
+        for (auto* obs : m_observers)
+            obs->onDiceRolled(*decision.player, getSumOfLastRoll());
+
+        break;
+    }
+    case Decision::Type::MortgageProperty:
+    {
+        Tile* tile = m_board.getTileById(tileId);
+        auto* property = dynamic_cast<PropertyTile*>(tile);
+
+        if (!property || !canMortgage(*decision.player, *property))
+        {
+            // Ask again
+            queueAction(std::make_unique<RaiseMoneyAction>(
+                *decision.player,
+                decision.requiredAmount,
+                decision.creditor
+            ));
+        }
+        else
+        {
+            mortgageProperty(*decision.player, *property);
+
+            // Try again after mortgaging
+            queueAction(std::make_unique<RaiseMoneyAction>(
+                *decision.player,
+                decision.requiredAmount,
+                decision.creditor
+            ));
+        }
     }
 
     m_pendingDecision.reset();
     m_state = GameState::Free;
 }
+
+//REQUEST
 void GameManager::requestDecision(const Decision& decision)
 {
     m_pendingDecision = decision;
     m_state = GameState::WaitingForDecision;
 
+    Player& player = *decision.player;
+    DecisionProvider& controller = player.controller();
+
+    switch (decision.type)
+    {
+    case Decision::Type::BuyProperty:
+    {
+        controller.decideBuyProperty(
+            player,
+            *decision.property,
+            [this](bool accepted)
+            {
+                Decision result;
+                result.type = Decision::Type::BuyProperty;
+                result.boolValue = accepted;
+                submitDecisionResult(result);
+            });
+        break;
+    }
+
+    case Decision::Type::RollDice:
+    {
+        controller.waitForRoll(
+            player,
+            [this]()
+            {
+                Decision result;
+                result.type = Decision::Type::RollDice;
+                submitDecisionResult(result);
+            });
+        break;
+    }
+    }
+
     for (auto* obs : m_observers)
         obs->onDecisionRequested(decision);
+}
+
+
+// Trade management
+bool GameManager::canCommitTrades() const
+{
+    return m_state == GameState::Free
+        || m_state == GameState::WaitingForDecision;
+}
+void GameManager::proposeTrade(const TradeOffer& trade)
+{
+    m_pendingTrades.push_back(trade);
+
+    for (auto* obs : m_observers)
+        obs->onTradeProposed(trade);
+}
+void GameManager::acceptTrade(size_t index, Player& who)
+{
+    auto& trade = m_pendingTrades[index];
+
+    if (&who == trade.target)
+        trade.targetAccepted = true;
+}
+void GameManager::processTrades()
+{
+    if (!canCommitTrades())
+        return;
+
+    for (auto it = m_pendingTrades.begin(); it != m_pendingTrades.end(); )
+    {
+        if (it->proposerAccepted && it->targetAccepted)
+        {
+            executeTrade(*it);
+            it = m_pendingTrades.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+void GameManager::executeTrade(const TradeOffer& trade)
+{
+    //trade logic
+    //for (auto* p : trade.giveProperties)
+    //{
+    //    trade.proposer->removeProperty(*p);
+    //    trade.target->addProperty(*p);
+    //    p->setOwner(trade.target);
+    //}
+
+    //for (auto* p : trade.receiveProperties)
+    //{
+    //    trade.target->removeProperty(*p);
+    //    trade.proposer->addProperty(*p);
+    //    p->setOwner(trade.proposer);
+    //}
+
+    //transferMoney(*trade.proposer, *trade.target, trade.giveMoney);
+    //transferMoney(*trade.target, *trade.proposer, trade.receiveMoney);
 }

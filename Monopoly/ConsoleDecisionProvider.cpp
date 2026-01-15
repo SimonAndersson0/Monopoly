@@ -1,20 +1,27 @@
 #include "ConsoleDecisionProvider.h"
 #include "Player.h"
 #include "PropertyTile.h"
-void ConsoleDecisionProvider::waitForRoll(Player& player)
+#include <functional>
+
+void ConsoleDecisionProvider::waitForRoll(
+    Player& player,
+    std::function<void()> onRolled)
 {
     m_ui.waitForRoll(player);
+
+
+    onRolled();
 }
 
-bool ConsoleDecisionProvider::decideBuyProperty(
+void ConsoleDecisionProvider::decideBuyProperty(
     Player& player,
-    PropertyTile& property)
+    PropertyTile& property,
+    std::function<void(bool)> onDecided)
 {
-    return m_ui.requestBuyProperty(player, property);
+    bool buy = m_ui.requestBuyProperty(player, property);
+    onDecided(buy);
 }
 
-PropertyTile* ConsoleDecisionProvider::decideMortgageProperty(
-    Player& player)
-{
-    return m_ui.requestMortgageProperty(player);
+void ConsoleDecisionProvider::decideMortgageProperty(Player& player) {
+
 }

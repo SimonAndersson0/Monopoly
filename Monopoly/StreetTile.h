@@ -9,8 +9,8 @@ class StreetTile :
     public PropertyTile
 {
     public:
-        explicit StreetTile(const std::string& name, int price, const std::vector<int>& rent, const std::string& colorGroup, int houseCost)
-            : PropertyTile(name, price, rent),
+        explicit StreetTile(const int& ID, const std::string& name, int price, const std::vector<int>& rent, const std::string& colorGroup, int houseCost)
+            : PropertyTile(ID, name, price, rent),
             m_colorGroup(colorGroup),
 			m_houseCost(houseCost),
 			m_maxHouses(4) //fix this

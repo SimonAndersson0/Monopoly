@@ -189,6 +189,7 @@
     <ClInclude Include="TaxTile.h" />
     <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TradeOffer.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UtilityTile.h" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "CardTile.h"
 
-CardTile::CardTile(const std::string& name, const CardTileType type)
-	: ActionTile(name), m_type(type)
+CardTile::CardTile(const int& ID,const std::string& name, const CardTileType type)
+	: ActionTile(ID,name), m_type(type)
 {
 }
 

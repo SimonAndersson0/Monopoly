@@ -4,11 +4,11 @@
 
 BankruptcyAction::BankruptcyAction(Player& player, Player* creditor)
     : m_player(player)
-    , m_creditor(*creditor)
+    , m_creditor(creditor)
 {
 }
 
 void BankruptcyAction::execute(GameManager& game)
 {
-    game.declareBankruptcy(m_player, &m_creditor);
+    game.declareBankruptcy(m_player, m_creditor);
 }

@@ -65,6 +65,7 @@ public:
 	int countOwnedRailroads(const Player& player) const;
 	bool doesPlayerOwnAllInSet(const Player& player, const PropertyTile& property) const;
 
+    int getBankMoney() const { return m_totalMoney;  }
 
     //decisions
 

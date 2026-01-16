@@ -25,30 +25,7 @@ Game::Game(const std::string& boardXmlPath, UI& ui)
 {
 }
 
-void Game::run()
-{
-    setupPlayers();
-    m_gameManager.addObserver(&m_ui);
 
-    while (!m_gameManager.isGameOver(m_players))
-    {
-        Player& player = m_players[m_currentPlayerIndex];
-
-        if (!player.isBankrupt())
-        {
-            for (auto* obs : m_gameManager.getObservers())
-                obs->onTurnStarted(player);
-
-            playTurn(player);
-        }
-
-        m_currentPlayerIndex =
-            (m_currentPlayerIndex + 1) % m_players.size();
-    }
-
-    for (auto* obs : m_gameManager.getObservers())
-        obs->onGameOver();
-}
 
 void Game::setupPlayers()
 {
@@ -74,15 +51,34 @@ void Game::setupPlayers()
     }
 }
 
+void Game::run()
+{
+    setupPlayers();
+    m_gameManager.addObserver(&m_ui);
+
+    while (!m_gameManager.isGameOver(m_players))
+    {
+        Player& player = m_players[m_currentPlayerIndex];
+
+        if (!player.isBankrupt())
+        {
+            for (auto* obs : m_gameManager.getObservers())
+                obs->onTurnStarted(player);
+
+            playTurn(player);
+        }
+
+        m_currentPlayerIndex =
+            (m_currentPlayerIndex + 1) % m_players.size();
+    }
+
+    for (auto* obs : m_gameManager.getObservers())
+        obs->onGameOver();
+}
+
 void Game::playTurn(Player& player)
 {
     // Start the turn by requesting a roll
-    //m_gameManager.requestDecision({
-    //    Decision::Type::RollDice,
-    //    &player,
-    //    nullptr
-    //    });
-
     m_gameManager.requestDecision(
         RollDiceDecision{
             &player

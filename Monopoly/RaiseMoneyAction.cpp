@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "PayMoneyAction.h"
 #include "BankruptcyAction.h"
-#include "DecisionProvider.h"
 #include "Decision.h"
 
 #include <memory>
@@ -20,8 +19,8 @@ RaiseMoneyAction::RaiseMoneyAction(
 }
 void RaiseMoneyAction::execute(GameManager& game)
 {
-    // If we already have enough cash, continue
-    if (game.canAfford(m_player,m_requiredAmount))
+    // If we can already pay, finish
+    if (game.canAfford(m_player, m_requiredAmount))
     {
         game.queueAction(
             std::make_unique<PayMoneyAction>(
@@ -33,10 +32,9 @@ void RaiseMoneyAction::execute(GameManager& game)
         return;
     }
 
-    
-	if (!game.canRaiseMoney(m_player, m_requiredAmount))
+    // If no way to raise money  bankruptcy
+    if (!game.canRaiseMoney(m_player, m_requiredAmount))
     {
-        // Cannot raise enough money, declare bankruptcy
         game.queueAction(
             std::make_unique<BankruptcyAction>(
                 m_player,
@@ -46,11 +44,12 @@ void RaiseMoneyAction::execute(GameManager& game)
         return;
     }
 
+    // ONLY request decision — NOTHING ELSE
     game.requestDecision(
         MortgagePropertyDecision{
             &m_player,
             m_requiredAmount,
             m_creditor
-        });
-
+        }
+    );
 }

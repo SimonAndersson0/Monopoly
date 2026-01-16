@@ -14,6 +14,6 @@ public:
 
 private:
     Player& m_player;
-    Player& m_creditor;
+    Player* m_creditor;
 };
 

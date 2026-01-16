@@ -13,6 +13,9 @@
 #include "UtilityTile.h"
 #include "StreetTile.h"
 #include "railroadTile.h"
+#include "RaiseMoneyAction.h"
+#include "BankruptcyAction.h"
+#include <iostream>
 
 // Constructor: initializes board size and dice
 GameManager::GameManager(const Board& board, int diceAmount, int diceMaxValue)
@@ -137,7 +140,22 @@ void GameManager::transferMoney(Player& from, Player& to, int amount){
 }
 
 bool GameManager::canRaiseMoney(const Player& player, int amount) const{
-    return player.calculateNetWorth() >= amount;
+    int playerNetworth = player.calculateNetWorth();
+
+    if (playerNetworth <= amount) {  //player cannot raise enough money
+        return false;
+    }
+    
+    if (canAfford(player, amount)) {//player can afford with current money on hand
+        return true;
+    }
+    //check if bank+ player money is enough to pay
+    int missingAmount = amount - player.getMoney();
+
+    //true if player and bank has enough money for player to be able to raise money
+    return missingAmount <= getBankMoney();
+           
+
 }
 
 void GameManager::mortgageProperty(Player& player, PropertyTile& property) {
@@ -296,7 +314,7 @@ bool GameManager::doesPlayerOwnAllInSet(const Player& player, const PropertyTile
 //SUBMIT
 void GameManager::submitDecisionResult(const DecisionResult& result)
 {
-    std::visit([this](auto&& r)
+    std::visit([this](auto&& r) //r is DecisionResult
         {
             using T = std::decay_t<decltype(r)>;
 
@@ -330,16 +348,38 @@ void GameManager::submitDecisionResult(const DecisionResult& result)
             }
             else if constexpr (std::is_same_v<T, MortgageResult>)
             {
+                const auto& decision = std::get<MortgagePropertyDecision>(*m_pendingDecision); //get decision info
+                //PROBLEM MIGHT BE THAT CANRAISEMONEY DONT CHECK IF BANK CAN GIVE THE PLAYER THE required amount 
+                if (r.propertyId < 0)
+                {
+                    queueAction(
+                        std::make_unique<BankruptcyAction>(
+                            *decision.player,
+                            decision.creditor
+                        )
+                    );
+                    return;
+                }
                 Tile* tile = m_board.getTileById(r.propertyId);
                 auto* property = dynamic_cast<PropertyTile*>(tile);
-
-                const auto& decision =
-                    std::get<MortgagePropertyDecision>(*m_pendingDecision);
-
                 if (property && canMortgage(*decision.player, *property))
                 {
                     mortgageProperty(*decision.player, *property);
                 }
+                std::cout << "Mortgage resolved\n";
+                // ontinue raising money if in dept
+                if (decision.requiredAmount > 0 ) {
+                    std::cout << "anotherpaymoneycreated resolved\n";
+                    queueAction(
+                        std::make_unique<PayMoneyAction>(
+                            *decision.player,
+                            decision.requiredAmount,
+                            decision.creditor
+                        )
+                    );
+                }
+
+
             }
         }, result);
 
@@ -385,6 +425,7 @@ void GameManager::requestDecision(const Decision & decision)
             }
             else if constexpr (std::is_same_v<T, MortgagePropertyDecision>)
             {
+                std::cout << "Mortgage decision requested\n";
                 controller.decideMortgageProperty(
                     player,
                     d.requiredAmount,

@@ -44,4 +44,5 @@ void PayMoneyAction::execute(GameManager& game)
             )
         );
     }
+
 }

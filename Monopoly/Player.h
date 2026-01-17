@@ -34,6 +34,7 @@ public:
     void addProperty(PropertyTile& property);
     void removeProperty(PropertyTile& property);
     bool owns(const PropertyTile& property) const;
+    const std::vector<PropertyTile*>& getNoneMortgagedProperties() const;
 
     const std::vector<PropertyTile*>& getProperties() const;
 

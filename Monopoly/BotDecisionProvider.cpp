@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "PropertyTile.h"
 #include <functional>
+#include <iostream>
 
 
 void BotDecisionProvider::waitForRoll(
@@ -25,9 +26,9 @@ void BotDecisionProvider::decideMortgageProperty(
     std::function<void(int propertyId)> onDecided
 ){
    int propertyId;
-   player.getProperties().empty() ? propertyId = -1 : propertyId = player.getProperties().front()->getID(); //mortgage first property if any
+   player.getNoneMortgagedProperties().empty() ? propertyId = -1 : propertyId = player.getNoneMortgagedProperties().front()->getID(); //mortgage first property if any avilable
+   
+   std::cout << "Bot decided to mortgage property ID: " << propertyId << "\n";
+   //propertyId = -1;
    onDecided(propertyId);
 }
-
-
-

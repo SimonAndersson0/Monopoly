@@ -97,6 +97,21 @@ bool Player::owns(const PropertyTile& property) const
         != m_properties.end();
 }
 
+const std::vector<PropertyTile*>& Player::getNoneMortgagedProperties() const
+{
+    static std::vector<PropertyTile*> nonMortgagedProperties;
+    nonMortgagedProperties.clear();
+    for (PropertyTile* property : m_properties)
+    {
+        if (!property->isMortgaged())
+        {
+            nonMortgagedProperties.push_back(property);
+        }
+    }
+	return nonMortgagedProperties;
+   
+}
+
 const std::vector<PropertyTile*>& Player::getProperties() const
 {
     return m_properties;
@@ -149,3 +164,4 @@ void Player::realeseFromJail() {
 void Player::declareBankruptcy() {
     m_bankrupt = true;
 }
+

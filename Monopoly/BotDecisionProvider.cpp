@@ -28,7 +28,7 @@ void BotDecisionProvider::decideMortgageProperty(
    int propertyId;
    player.getNoneMortgagedProperties().empty() ? propertyId = -1 : propertyId = player.getNoneMortgagedProperties().front()->getID(); //mortgage first property if any avilable
    
-   std::cout << "Bot decided to mortgage property ID: " << propertyId << "\n";
+  // std::cout << "Bot decided to mortgage property ID: " << propertyId << "\n";
    //propertyId = -1;
    onDecided(propertyId);
 }

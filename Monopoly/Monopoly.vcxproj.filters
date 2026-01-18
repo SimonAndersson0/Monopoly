@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ThirdParty">
-      <UniqueIdentifier>{75378eab-e954-4651-8fce-50bf733b1734}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{14b6fbe0-782a-4c3c-9273-baca7cad9237}</UniqueIdentifier>
     </Filter>
@@ -46,6 +43,15 @@
     <Filter Include="Header Files\Observer">
       <UniqueIdentifier>{4eb4906f-29ce-49b7-8fcd-0870a7bcfb3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{49bcf4a3-de3a-4319-9fcd-fa947e925753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\TinyXML2">
+      <UniqueIdentifier>{654b429a-9bff-4894-80fe-f7fb1684b5dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\SFML">
+      <UniqueIdentifier>{618ca23c-7cc5-4225-824c-e1df9a63ea46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Monopoly.cpp">
@@ -65,9 +71,6 @@
     </ClCompile>
     <ClCompile Include="Dice.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp">
-      <Filter>ThirdParty</Filter>
     </ClCompile>
     <ClCompile Include="Card.cpp">
       <Filter>Source Files</Filter>
@@ -132,6 +135,9 @@
     <ClCompile Include="PayMoneyAction.cpp">
       <Filter>Source Files\Action</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp">
+      <Filter>ThirdParty\TinyXML2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -148,9 +154,6 @@
     </ClInclude>
     <ClInclude Include="Dice.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h">
-      <Filter>ThirdParty</Filter>
     </ClInclude>
     <ClInclude Include="Card.h">
       <Filter>Header Files</Filter>
@@ -233,6 +236,18 @@
     <ClInclude Include="GameObserver.h">
       <Filter>Header Files\Observer</Filter>
     </ClInclude>
+    <ClInclude Include="Decision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DecisionTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TradeOffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h">
+      <Filter>ThirdParty\TinyXML2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Resources\boardspaces.xml">
@@ -244,10 +259,37 @@
     <Xml Include="Resources\communitydeckcards.xml">
       <Filter>Resources</Filter>
     </Xml>
+    <Xml Include="Resources\BoardSpacesEn.xml" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Monopoly.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sfml-audio-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-audio-d-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-graphics-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-graphics-d-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-network-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-network-d-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-system-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-system-d-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -156,6 +156,7 @@
     <ClCompile Include="PropertyTile.cpp" />
     <ClCompile Include="RailroadTile.cpp" />
     <ClCompile Include="RaiseMoneyAction.cpp" />
+    <ClCompile Include="SFMLUI.cpp" />
     <ClCompile Include="StreetTile.cpp" />
     <ClCompile Include="TaxTile.cpp" />
     <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="BankruptcyAction.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="BotDecisionProvider.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="BuyPropertyAction.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardDeck.h" />
@@ -192,6 +194,7 @@
     <ClInclude Include="RailroadTile.h" />
     <ClInclude Include="RaiseMoneyAction.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SFMLUI.h" />
     <ClInclude Include="StreetTile.h" />
     <ClInclude Include="TaxTile.h" />
     <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h" />
@@ -218,6 +221,11 @@
     <None Include="sfml-network-d-3.dll" />
     <None Include="sfml-system-3.dll" />
     <None Include="sfml-system-d-3.dll" />
+    <None Include="sfml-window-3.dll" />
+    <None Include="sfml-window-d-3.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\ARIAL.TTF" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

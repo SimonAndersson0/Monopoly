@@ -138,6 +138,9 @@
     <ClCompile Include="ThirdParty\tinyxml2\tinyxml2.cpp">
       <Filter>ThirdParty\TinyXML2</Filter>
     </ClCompile>
+    <ClCompile Include="SFMLUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -248,6 +251,12 @@
     <ClInclude Include="ThirdParty\tinyxml2\tinyxml2.h">
       <Filter>ThirdParty\TinyXML2</Filter>
     </ClInclude>
+    <ClInclude Include="SFMLUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Resources\boardspaces.xml">
@@ -291,5 +300,16 @@
     <None Include="sfml-system-d-3.dll">
       <Filter>ThirdParty\SFML</Filter>
     </None>
+    <None Include="sfml-window-d-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+    <None Include="sfml-window-3.dll">
+      <Filter>ThirdParty\SFML</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\ARIAL.TTF">
+      <Filter>Resources</Filter>
+    </Font>
   </ItemGroup>
 </Project>

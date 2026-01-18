@@ -1,183 +1,322 @@
 #include "SFMLUI.h"
-#include "Button.h"
-
 #include "Player.h"
+#include "Tile.h"
 #include "PropertyTile.h"
+#include "Decision.h"
+#include "TradeOffer.h"
+
+#include <iostream>
+
+// ------------------------------------------------------------
+// Constructor / Destructor
+// ------------------------------------------------------------
 
 SFMLUI::SFMLUI()
-    : m_window(sf::VideoMode(800, 600), "Monopoly Test UI")
+    : m_window(
+        sf::VideoMode({ m_windowW, m_windowH }),
+        "Monopoly - SFML UI"
+    )
 {
-    m_font.loadFromFile("arial.ttf"); // put font next to exe
-}
-
-void SFMLUI::run()
-{
-    while (m_window.isOpen())
+    if (!m_font.openFromFile("Resources/ARIAL.TTF"))
     {
-        processEvents();
-        draw();
+        std::cerr << "FAILED TO LOAD FONT\n";
+        m_fontLoaded = false;
     }
+    else
+    {
+        m_fontLoaded = true;
+        std::cout << "Font loaded OK\n";
+    }
+
+    m_window.setKeyRepeatEnabled(false);
+
+    m_window.setView(
+        sf::View(sf::FloatRect(
+            { 0.f, 0.f },
+            { static_cast<float>(m_windowW), static_cast<float>(m_windowH) }
+        ))
+    );
+
+
+    m_window.setSize({ m_windowW, m_windowH });
+
+    pushMessage("SFML UI initialized");
 }
 
-// ---------- Logging ----------
-void SFMLUI::addLog(const std::string& text)
+SFMLUI::~SFMLUI()
 {
-    m_log.push_back(text);
-    if (m_log.size() > 20)
+    if (m_window.isOpen())
+        m_window.close();
+}
+
+// ------------------------------------------------------------
+// Helpers
+// ------------------------------------------------------------
+
+void SFMLUI::pushMessage(const std::string& msg)
+{
+    m_log.push_back(msg);
+    if (m_log.size() > 8)
         m_log.erase(m_log.begin());
 }
 
-// ---------- Observers ----------
+// ------------------------------------------------------------
+// Drawing
+// ------------------------------------------------------------
+
+void SFMLUI::drawModal(const std::vector<Button>& buttons, const std::string& title)
+{
+    m_window.clear(sf::Color(30, 30, 30));
+
+    
+    // 
+    // Title
+    sf::Text titleText(m_font);
+
+    titleText.setFont(m_font);
+    titleText.setString(title);
+    titleText.setCharacterSize(18);
+    titleText.setFillColor(sf::Color::White);
+    titleText.setPosition({ 16.f, 16.f });
+    m_window.draw(titleText);
+
+    // Log
+    float y = 48.f;
+    for (const auto& msg : m_log)
+    {
+        sf::Text line(m_font);
+        line.setFont(m_font);
+        line.setString(msg);
+        line.setCharacterSize(14);
+        line.setFillColor(sf::Color(200, 200, 200));
+        line.setPosition({ 16.f, y });
+        m_window.draw(line);
+        y += 18.f;
+    }
+
+    // Buttons
+    for (const auto& b : buttons)
+    {
+        m_window.draw(b.rect);
+        m_window.draw(b.text);
+    }
+
+    m_window.display();
+}
+
+// ------------------------------------------------------------
+// UI Prompts
+// ------------------------------------------------------------
+
+bool SFMLUI::promptYesNo(const std::string& prompt)
+{
+    Button yes(m_font);
+    yes.rect.setSize({ 120.f, 36.f });
+    yes.rect.setPosition({ 100.f, 260.f });
+    yes.rect.setFillColor(sf::Color(70, 130, 180));
+
+    yes.text.setFont(m_font);
+    yes.text.setString("Yes");
+    yes.text.setCharacterSize(16);
+    yes.text.setFillColor(sf::Color::White);
+    yes.text.setPosition({ 136.f, 266.f });
+
+    Button no(m_font);
+    no.rect.setSize({ 120.f, 36.f });
+    no.rect.setPosition({ 340.f, 260.f });
+    no.rect.setFillColor(sf::Color(128, 128, 128));
+
+    no.text.setFont(m_font);
+    no.text.setString("No");
+    no.text.setCharacterSize(16);
+    no.text.setFillColor(sf::Color::White);
+    no.text.setPosition({ 386.f, 266.f });
+
+    std::vector<Button> buttons{ yes, no };
+    drawModal(buttons, prompt);
+
+    while (m_window.isOpen())
+    {
+        while (auto event = m_window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+                m_window.close();
+
+            if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>())
+            {
+                if (mouse->button == sf::Mouse::Button::Left)
+                {
+                    sf::Vector2f p{
+                        static_cast<float>(mouse->position.x),
+                        static_cast<float>(mouse->position.y)
+                    };
+
+                    if (yes.contains(p)) return true;
+                    if (no.contains(p)) return false;
+                }
+            }
+
+            if (auto key = event->getIf<sf::Event::KeyPressed>())
+            {
+                if (key->code == sf::Keyboard::Key::Y) return true;
+                if (key->code == sf::Keyboard::Key::N) return false;
+                if (key->code == sf::Keyboard::Key::Escape) return false;
+            }
+        }
+
+        drawModal(buttons, prompt);
+    }
+
+    return false;
+}
+
+void SFMLUI::waitContinue(const std::string& prompt)
+{
+    Button cont(m_font);
+    cont.rect.setSize({ 200.f, 36.f });
+    cont.rect.setPosition({ (m_windowW - 200.f) / 2.f, 260.f });
+    cont.rect.setFillColor(sf::Color(70, 130, 180));
+
+    cont.text.setFont(m_font);
+    cont.text.setString("Continue (Enter)");
+    cont.text.setCharacterSize(14);
+    cont.text.setFillColor(sf::Color::White);
+    cont.text.setPosition({ cont.rect.getPosition().x + 18.f, 266.f });
+
+    std::vector<Button> buttons{ cont };
+    drawModal(buttons, prompt);
+
+    while (m_window.isOpen())
+    {
+        while (auto event = m_window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+                m_window.close();
+
+            if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>())
+            {
+                if (mouse->button == sf::Mouse::Button::Left)
+                {
+                    sf::Vector2f p{
+                        static_cast<float>(mouse->position.x),
+                        static_cast<float>(mouse->position.y)
+                    };
+                    if (cont.contains(p)) return;
+                }
+            }
+
+            if (auto key = event->getIf<sf::Event::KeyPressed>())
+            {
+                if (key->code == sf::Keyboard::Key::Enter ||
+                    key->code == sf::Keyboard::Key::Space)
+                    return;
+            }
+        }
+
+        drawModal(buttons, prompt);
+    }
+}
+
+// ------------------------------------------------------------
+// GameObserver callbacks
+// ------------------------------------------------------------
+
 void SFMLUI::onTurnStarted(const Player& player)
 {
-    addLog("--- " + player.getName() + "'s turn ---");
+    pushMessage("--- " + player.getName() + "'s turn ---");
 }
 
 void SFMLUI::onDiceRolled(const Player& player, int total)
 {
-    addLog(player.getName() + " rolled " + std::to_string(total));
+    pushMessage(player.getName() + " rolled " + std::to_string(total));
 }
 
 void SFMLUI::onPlayerMoved(const Player& player, const Tile& tile)
 {
-    addLog(player.getName() + " landed on " + tile.getName());
+    pushMessage(player.getName() + " landed on " + tile.getName());
 }
 
-void SFMLUI::onMoneyChanged(const Player& player, int amount)
+void SFMLUI::onMoneyChanged(const Player& player, int newAmount)
 {
-    addLog(player.getName() + " now has $" + std::to_string(amount));
+    pushMessage(player.getName() + " now has $" + std::to_string(newAmount));
 }
 
 void SFMLUI::onGameOver()
 {
-    addLog("GAME OVER");
+    pushMessage("Game Over!");
+    waitContinue("Game Over");
 }
 
 void SFMLUI::onPropertyBought(const Player& player, const PropertyTile& property)
 {
-    addLog(player.getName() + " bought " + property.getName());
+    pushMessage(player.getName() + " bought " + property.getName());
 }
 
 void SFMLUI::onBankruptcy(const Player& player)
 {
-    addLog(player.getName() + " went bankrupt!");
+    pushMessage(player.getName() + " declared bankruptcy");
+    waitContinue(player.getName() + " bankrupt");
 }
 
 void SFMLUI::onPassGo(const Player& player)
 {
-    addLog(player.getName() + " passed GO");
+    pushMessage(player.getName() + " passed GO");
 }
 
-void SFMLUI::onTradeProposed(const TradeOffer& trade)
+void SFMLUI::onDecisionRequested(const Decision&)
 {
-    addLog(trade.proposer->getName() + " proposed a trade");
+    pushMessage("Decision requested");
+}
+
+void SFMLUI::onTradeProposed(const TradeOffer&)
+{
+    pushMessage("Trade proposed");
 }
 
 void SFMLUI::onMortgage(const Player& player, const PropertyTile& property)
 {
-    addLog(player.getName() + " mortgaged " + property.getName());
+    pushMessage(player.getName() + " mortgaged " + property.getName());
 }
 
-// ---------- Decisions ----------
-void SFMLUI::onDecisionRequested(const Decision& decision)
+// ------------------------------------------------------------
+// UI Input
+// ------------------------------------------------------------
+
+void SFMLUI::waitForRoll(const Player& player)
 {
-    m_pendingDecision = decision;
-    rebuildButtons();
+    waitContinue(player.getName() + ", press Continue to roll dice");
 }
 
-// ---------- UI ----------
-void SFMLUI::rebuildButtons()
+bool SFMLUI::requestBuyProperty(const Player& player, const PropertyTile& property)
 {
-    m_buttons.clear();
-
-    if (!m_pendingDecision.has_value())
-        return;
-
-    std::visit([this](auto&& d)
-        {
-            using T = std::decay_t<decltype(d)>;
-
-            if constexpr (std::is_same_v<T, RollDiceDecision>)
-            {
-                m_buttons.emplace_back(
-                    sf::Vector2f(50, 500),
-                    sf::Vector2f(200, 40),
-                    "Roll Dice",
-                    m_font,
-                    [this]()
-                    {
-                        submitDecisionResult(RollDiceResult{});
-                        m_pendingDecision.reset();
-                        m_buttons.clear();
-                    }
-                );
-            }
-            else if constexpr (std::is_same_v<T, BuyPropertyDecision>)
-            {
-                m_buttons.emplace_back(
-                    { 50, 500 }, { 200, 40 }, "Buy", m_font,
-                    [this]()
-                    {
-                        submitDecisionResult(BuyPropertyResult{ true });
-                        m_pendingDecision.reset();
-                        m_buttons.clear();
-                    }
-                );
-                m_buttons.emplace_back(
-                    { 300, 500 }, { 200, 40 }, "Skip", m_font,
-                    [this]()
-                    {
-                        submitDecisionResult(BuyPropertyResult{ false });
-                        m_pendingDecision.reset();
-                        m_buttons.clear();
-                    }
-                );
-            }
-            else if constexpr (std::is_same_v<T, MortgagePropertyDecision>)
-            {
-                // TEMP: mortgage first valid property automatically
-                m_buttons.emplace_back(
-                    { 50, 500 }, { 300, 40 }, "Mortgage First Property", m_font,
-                    [this, &d]()
-                    {
-                        int id = d.player->getProperties().front()->getID();
-                        submitDecisionResult(MortgageResult{ id });
-                        m_pendingDecision.reset();
-                        m_buttons.clear();
-                    }
-                );
-            }
-        }, *m_pendingDecision);
+    return promptYesNo(
+        player.getName() + ", buy " +
+        property.getName() + " for $" +
+        std::to_string(property.getPrice()) + "?"
+    );
 }
 
-void SFMLUI::processEvents()
+int SFMLUI::requestMortgageProperty(const Player& player)
 {
-    sf::Event event;
-    while (m_window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-            m_window.close();
-
-        for (auto& b : m_buttons)
-            b.handleEvent(event, m_window);
-    }
+    pushMessage("Mortgage not implemented for " + player.getName());
+    waitContinue("Mortgage cancelled");
+    return -1;
 }
 
-void SFMLUI::draw()
+int SFMLUI::requestPlayerCount()
 {
-    m_window.clear(sf::Color::Black);
+    waitContinue("Using default player count: 2");
+    return 2;
+}
 
-    float y = 10.f;
-    for (const auto& line : m_log)
-    {
-        sf::Text text(line, m_font, 16);
-        text.setPosition(10.f, y);
-        m_window.draw(text);
-        y += 20.f;
-    }
+std::string SFMLUI::requestPlayerName(int index)
+{
+    std::string name = "Player" + std::to_string(index + 1);
+    pushMessage("Using player name: " + name);
+    return name;
+}
 
-    for (auto& b : m_buttons)
-        b.draw(m_window);
-
-    m_window.display();
+bool SFMLUI::requestIsBot(const std::string& playerName)
+{
+    return promptYesNo(playerName + " is a bot?");
 }

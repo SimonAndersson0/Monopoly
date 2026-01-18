@@ -5,13 +5,14 @@
 
 #include "Game.h"
 #include "ConsoleUI.h"
+#include "SFMLUI.h"
 
 #include <SFML/Graphics.hpp>
 
 
 int main()
 {
-    //    //SFML TEST
+    ////SFML TEST
     //sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
     //sf::CircleShape shape(100.f);
     //shape.setFillColor(sf::Color::Green);
@@ -31,8 +32,11 @@ int main()
     
     
     std::cout << "Welcome to monopol!\n";
-    ConsoleUI ui;
+    SFMLUI ui;
+    //ConsoleUI ui;
     //old Resources/boardspaces.xml
+
+    std::cout << "Welcome to monopol!2\n";
     Game game("Resources/BoardSpacesEn.xml", ui);
     game.run();
 

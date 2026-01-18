@@ -1,22 +1,18 @@
-#pragma once
+// SFMLUI.h
 #include <SFML/Graphics.hpp>
-#include <functional>
 
-class Button {
-public:
-    Button(
-        const sf::Vector2f& pos,
-        const sf::Vector2f& size,
-        const std::string& text,
-        sf::Font& font,
-        std::function<void()> onClick
-    );
+struct Button
+{
+    sf::RectangleShape rect;
+    sf::Text text;
 
-    void draw(sf::RenderWindow& window);
-    void handleEvent(const sf::Event& event, const sf::RenderWindow& window);
+    explicit Button(const sf::Font& font)
+        : text(font)
+    {
+    }
 
-private:
-    sf::RectangleShape m_shape;
-    sf::Text m_text;
-    std::function<void()> m_onClick;
+    bool contains(sf::Vector2f p) const
+    {
+        return rect.getGlobalBounds().contains(p);
+    }
 };

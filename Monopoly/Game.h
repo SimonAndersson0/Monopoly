@@ -41,5 +41,6 @@ private:
     std::vector<Player> m_players;
     int m_currentPlayerIndex = 0;
 
+    std::vector<std::unique_ptr<UI>> m_playerUIs;
     std::vector<std::unique_ptr<DecisionProvider>> m_controllers;
 };

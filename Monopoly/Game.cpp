@@ -28,30 +28,31 @@ Game::Game(const std::string& boardXmlPath, UI& ui)
 
 
 
-//void Game::setupPlayers()
-//{
-//    int playerCount = m_ui.requestPlayerCount();
-//
-//    for (int i = 0; i < playerCount; ++i)
-//    {
-//        std::string name = m_ui.requestPlayerName(i);
-//
-//        bool isBot = m_ui.requestIsBot(name);
-//
-//        UI* uiForPlayer = &m_ui; // shared UI by default
-//
-//        std::unique_ptr<DecisionProvider> controller;
-//
-//        if (isBot)
-//            controller = std::make_unique<BotDecisionProvider>();
-//        else
-//            controller = std::make_unique<ConsoleDecisionProvider>(*uiForPlayer);
-//
-//        m_players.emplace_back(name, 15000, *controller);
-//        m_controllers.push_back(std::move(controller));
-//    }
-//}
+void Game::setupPlayers()
+{
+    int playerCount = m_ui.requestPlayerCount();
 
+    for (int i = 0; i < playerCount; ++i)
+    {
+        std::string name = m_ui.requestPlayerName(i);
+
+        bool isBot = m_ui.requestIsBot(name);
+
+        UI* uiForPlayer = &m_ui; // shared UI by default
+
+        std::unique_ptr<DecisionProvider> controller;
+
+        if (isBot)
+            controller = std::make_unique<BotDecisionProvider>();
+        else
+            controller = std::make_unique<ConsoleDecisionProvider>(*uiForPlayer);
+
+        m_players.emplace_back(name, 15000, *controller);
+        m_controllers.push_back(std::move(controller));
+    }
+}
+
+/*
 void Game::setupPlayers()
 {
     int playerCount = m_ui.requestPlayerCount();
@@ -90,7 +91,7 @@ void Game::setupPlayers()
         m_players.emplace_back(name, 15000, *controller);
         m_controllers.push_back(std::move(controller));
     }
-}
+}*/
 
 
 void Game::run()

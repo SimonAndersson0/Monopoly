@@ -41,7 +41,7 @@ public:
     bool requestIsBot(const std::string& playerName) override;
 
 private:
-    // Simple button helper
+    // button helper
     struct Button
     {
         sf::RectangleShape rect;
@@ -61,7 +61,7 @@ private:
     sf::Font m_font;
     bool m_fontLoaded = false;
 
-    std::vector<std::string> m_log; // recent messages
+    std::vector<std::string> m_log; 
     const unsigned m_windowW = 700;
     const unsigned m_windowH = 700;
 };

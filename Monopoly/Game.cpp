@@ -14,6 +14,8 @@
 #include "GameManager.h"
 #include "UI.h"
 #include "Tile.h"
+#include "SFMLDecisionProvider.h"
+#include "DecisionTypes.h"
 
 // Define destructor out-of-line so unique_ptr destructor is instantiated
 
@@ -74,7 +76,7 @@ void Game::setupPlayers()
             
             // Create new SFML UI for every player except player1
             if (i==0) {
-               controller = std::make_unique<ConsoleDecisionProvider>(*uiForPlayer);
+               controller = std::make_unique<SFMLDecisionProvider>(*uiForPlayer);
             } else
             {
                 auto sfmlUI = std::make_unique<SFMLUI>();
@@ -82,7 +84,7 @@ void Game::setupPlayers()
                 uiForPlayer = sfmlUI.get();
                 m_playerUIs.push_back(std::move(sfmlUI)); // keep alive
 
-                controller = std::make_unique<ConsoleDecisionProvider>(*uiForPlayer);
+                controller = std::make_unique<SFMLDecisionProvider>(*uiForPlayer);
 			}
 
         }
@@ -122,19 +124,23 @@ void Game::playTurn(Player& player)
 {
     // Start the turn by requesting a roll
     m_gameManager.requestDecision(
-        RollDiceDecision{
-            &player
-        }
+        RollDiceDecision{ &player }
     );
 
-    // Let the game manager + controllers resolve everything
+    // Let the game manager  controllers resolve everything
     while (true)
     {
-        // If we're waiting for a decision, do NOTHING
-        // UI / bots will submitDecisionResult()
+        // First, update all SFML decision providers to keep windows responsive
+        for (auto& controller : m_controllers)
+        {
+            if (auto* sfml = dynamic_cast<SFMLDecisionProvider*>(controller.get()))
+                sfml->update();
+        }
+
+        // If we're waiting for a decision, do nothing else
         if (m_gameManager.getState() == GameState::WaitingForDecision)
         {
-			std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Small sleep to prevent busy-waiting
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
             continue;
         }
 
@@ -145,7 +151,8 @@ void Game::playTurn(Player& player)
             continue;
         }
 
-        // Nothing left to resolve turn ends
+        // Nothing left to resolve, turn ends
         break;
     }
 }
+

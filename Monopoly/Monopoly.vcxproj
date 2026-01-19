@@ -156,6 +156,7 @@
     <ClCompile Include="PropertyTile.cpp" />
     <ClCompile Include="RailroadTile.cpp" />
     <ClCompile Include="RaiseMoneyAction.cpp" />
+    <ClCompile Include="SFMLDecisionProvider.cpp" />
     <ClCompile Include="SFMLUI.cpp" />
     <ClCompile Include="StreetTile.cpp" />
     <ClCompile Include="TaxTile.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="RailroadTile.h" />
     <ClInclude Include="RaiseMoneyAction.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SFMLDecisionProvider.h" />
     <ClInclude Include="SFMLUI.h" />
     <ClInclude Include="StreetTile.h" />
     <ClInclude Include="TaxTile.h" />
